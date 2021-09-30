@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Define start variables
+
+
+# Define functions here
+
+function pause(){
+ read -s -n 1 -p "Press any key to continue . . ."
+ echo ""
+}
+
+
+# CREATE GPT TABLE PACKAGES
+
+
+sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
+
+read -n 7 -p $'Select SSD: \n' ssdvar
+echo -e "\n"
+read -n 3 -p $'Select HDD: \n' hddvar
+echo -e "\n"
+
+
+echo -e "You selected: \n"
+
+sudo fdisk -l | grep  $ssdvar | cut -d " " -f 2,3,4 | sed 's/://g;s/,//g'
+
+echo -e "\n"
+
+sudo fdisk -l | grep  $hddvar | cut -d " " -f 2,3,4 | sed 's/://g;s/,//g'
+
+
