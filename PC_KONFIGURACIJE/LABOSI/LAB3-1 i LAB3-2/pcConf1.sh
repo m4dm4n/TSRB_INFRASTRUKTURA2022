@@ -54,22 +54,20 @@ function pause(){
 
 # Calculate Windows System partition size
 
-winSystemPartMB=$(($nvmeSizeMB-$winEfiPartMB-$msrPartMB-$winRecoveryPartMB-100))
+winSystemPartMB=$(($nvmeSizeMB-$winEfiPartMB-$msrPartMB-$winRecoveryPartMB-2))
 echo "Windows System Partition size is: " $winSystemPartMB "MB"
 echo -e "\n"
-
+winDataPartMB=$(($hddSize-2))
 
 sgdisk  --mbrtogpt /dev/$ssdVar
 sgdisk --pretend --mbrtogpt /dev/$hddVar 
 
 sgdisk -n 1:0:+"$winEfiPartMB"MiB -t 0:ef00 -c 0:"EFI System Partition" /dev/$ssdVar
-
 sgdisk -n 2:0:+"$msrPartMB"MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/$ssdVar
-
 sgdisk -n 3:0:+"$winSystemPartMB"MiB -t 0:0700 -c 0:"Windows11"  /dev/$ssdVar
-
 sgdisk -n 4:0:+"$winRecoveryPartMB"MiB -t 0:2700 -c 0:"MS Recovery"  /dev/$ssdVar
 
+sgdisk -n 1:0:+"$winDataPartMB"MiB -t 0:0700 -c 0:"DATA" /dev/$hddVar
 
 sgdisk -p /dev/$ssdVar
 sgdisk -p /dev/$hddVar

@@ -53,10 +53,11 @@ echo -e "\n"
 
 case $pcConf in
 
-1) echo "Calling script1";;
+1) echo "MIRKO";;
 
-2) echo "Calling script2";;
-
+2) echo "Calling script2"
+   ./pcConf2.sh
+   ;;
 4) echo "Calling script4";;
 
 Error) echo "Something is wrong";;
