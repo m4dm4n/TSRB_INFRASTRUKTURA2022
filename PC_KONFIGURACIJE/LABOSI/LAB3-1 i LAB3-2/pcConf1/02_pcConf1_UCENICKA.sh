@@ -31,9 +31,9 @@ winRecoveryPartinGB=$(( $winRecoveryPartinMB / 1024 ))
 #---------------------------
 sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
 
-read -n 7 -p $'Select SSD: \n' ssdVar
+read -e -n 7 -p $'Select SSD: \n' ssdVar
 echo -e "\n"
-read -n 3 -p $'Select HDD: \n' hddVar
+read -e -n 3 -p $'Select HDD: \n' hddVar
 echo -e "\n"
 
 #---------------------------
@@ -72,7 +72,7 @@ do
 
 sgdisk -n 0:0:+"$winEfiPartinMB"MiB -t 0:ef00 -c 0:"EFI System Partition" /dev/$ssdVar
 sgdisk -n 0:0:+"$msrPartinMB"MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/$ssdVar
-sgdisk -n 0:0:+100GiB -t 0:0700 -c 0:"Windows11"  /dev/$ssdVar
+sgdisk -n 0:0:+"$winSystemPartSize"GiB -t 0:0700 -c 0:"Windows11"  /dev/$ssdVar
 sgdisk -n 0:0:+"$winRecoveryPartinMB"MiB -t 0:2700 -c 0:"MS Recovery"  /dev/$ssdVar
 
 done
@@ -151,7 +151,104 @@ sudo sgdisk --sort /dev/$ssdVar
 sudo sgdisk -p /dev/$ssdVar
 sudo sgdisk --backup=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt /dev/$ssdVar
 dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 count=1 > $saveDIR/SSD/Linux1/01_SSD_Linux1_protectiveMBR.gpt
-dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=1 count=1 > $saveDIR/SSD/Linux1/01_SSD_Linux1_primaryHEADER.gpt
-dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=2 count=1 > $saveDIR/SSD/Linux1/01_SSD_Linux1_backupHEADER.gpt
-dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=3 > $saveDIR/SSD/Linux1/01_SSD_Linux1_GPTPartitions.gpt
+dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=1 count=1 > $saveDIR/SSD/Linux1/02_SSD_Linux1_primaryHEADER.gpt
+dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=2 count=1 > $saveDIR/SSD/Linux1/04_SSD_Linux1_backupHEADER.gpt
+dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=3 > $saveDIR/SSD/Linux1/03_SSD_Linux1_GPTPartitions.gpt
 pause
+
+# RESTORE BACKUP GPT WITH ALL PARTITIONS
+sudo sgdisk --load-backup=$saveDIR/SSD/00_SSD_ALLPARTITIONS.gpt /dev/$ssdVar
+sudo sgdisk --load-backup=$saveDIR/HDD/00_HDD_ALLPARTITIONS.gpt /dev/$hddVar
+
+
+# Saving Windows STORE partitions
+mkdir ~/BACKUP/SSD/Windows10_STORE
+for (( i=1; i<=$(($totalSSDpartitions-4)); i++ ))
+     do
+	 sgdisk -d $i /dev/nvme0n1 >/dev/null 2>&1
+	 done
+sgdisk --backup=$saveDIR/SSD/Windows10_STORE/00_SSD_Windows10_STORE.gpt /dev/$ssdVar
+dd if=$saveDIR/SSD/Windows10_STORE/00_SSD_Windows10_STORE.gpt bs=512 count=1 > $saveDIR/SSD/Windows10_STORE/01_SSD_Windows10_STORE_protectiveMBR.gpt
+dd if=$saveDIR/SSD/Windows10_STORE/00_SSD_Windows10_STORE.gpt bs=512 skip=1 count=1 > $saveDIR/SSD/Windows10_STORE/02_SSD_Windows10_STORE_primaryHEADER.gpt
+dd if=$saveDIR/SSD/Windows10_STORE/00_SSD_Windows10_STORE.gpt bs=512 skip=2 count=1 > $saveDIR/SSD/Windows10_STORE/04_SSD_Windows10_STORE_backupHEADER.gpt
+dd if=$saveDIR/SSD/Windows10_STORE/00_SSD_Windows10_STORE.gpt bs=512 skip=3 > $saveDIR/SSD/Windows10_STORE/03_SSD_Windows10_STORE_GPTPartitions.gpt
+
+
+# BACKUP WINDOWS GPT STRUCTURES
+# A little bit of cleaning first, removing Linux and Store partitions
+sgdisk --load-backup=$saveDIR/SSD/00_SSD_ALLPARTITIONS.gpt /dev/$ssdVar >/dev/null 2>&1
+totalSSDpartitions=$(grep -c $ssdVar"p"[0-9] /proc/partitions)
+totalHDDpartitions=$(grep -c $hddVar[0-9] /proc/partitions)
+
+
+for (( i=1; i<=4; i++ ))
+     do
+       sgdisk -d $i /dev/nvme0n1 >/dev/null 2>&1
+     done
+for (( i=$totalSSDpartitions; i>$(($totalSSDpartitions-4)); i-- ))
+     do
+       sgdisk -d $i /dev/nvme0n1 >/dev/null 2>&1
+     done
+sgdisk --sort /dev/nvme0n1 >/dev/null 2>&1
+sgdisk --backup=$saveDIR/SSD/00_SSD_CLEANED_PARTITIONS_1.gpt /dev/$ssdVar >/dev/null 2>&1
+sgdisk -p /dev/nvme0n1
+
+
+#numberofSteps=$(($totalSSDpartitions/4))
+
+# New partition number calculating
+totalSSDpartitions=$(grep -c $ssdVar"p"[0-9] /proc/partitions)
+totalHDDpartitions=$(grep -c $hddVar[0-9] /proc/partitions)
+echo "Ukupno ima "$totalSSDpartitions" Particija"
+
+
+# Saving Windows partitions
+for (( i=1; i<=$numberofWininstalls; i++ ))
+    do
+      sgdisk --load-backup=$saveDIR/SSD/00_SSD_CLEANED_PARTITIONS_$i.gpt /dev/$ssdVar >/dev/null 2>&1
+      for (( j=5; j<=$totalSSDpartitions; j++ ))
+        do
+          sgdisk -d $j /dev/$ssdVar >/dev/null 2>&1
+        done
+    sgdisk --backup=$saveDIR/SSD/Windows10_$i/00_SSD_Windows10_$i.gpt /dev/$ssdVar >/dev/null 2>&1
+    dd if=$saveDIR/SSD/Windows10_$i/00_SSD_Windows10_$i.gpt bs=512 count=1 > $saveDIR/SSD/Windows10_$i/01_SSD_Windows10_$i_protectiveMBR.gpt
+    dd if=$saveDIR/SSD/Windows10_$i/00_SSD_Windows10_$i.gpt bs=512 skip=1 count=1 > $saveDIR/SSD/Windows10_$i/02_SSD_Windows10_$i_primaryHEADER.gpt
+    dd if=$saveDIR/SSD/Windows10_$i/00_SSD_Windows10_$i.gpt bs=512 skip=2 count=1 > $saveDIR/SSD/Windows10_$i/04_SSD_Windows10_$i_backupHEADER.gpt
+    dd if=$saveDIR/SSD/Windows10_$i/00_SSD_Windows10_$i.gpt bs=512 skip=3 > $saveDIR/SSD/Windows10_$i/03_SSD_Windows10_$i_GPTPartitions.gpt
+
+    sgdisk --load-backup=$saveDIR/SSD/00_SSD_CLEANED_PARTITIONS_$i.gpt /dev/$ssdVar >/dev/null 2>&1
+
+    for (( k=1; k<=4; k++ ))
+       do
+         sgdisk -r $k:$(($k+4)) /dev/$ssdVar >/dev/null 2>&1
+       done
+
+    for (( n=5; n<=8; n++))
+       do
+         sgdisk -d $n /dev/$ssdVar >/dev/null 2>&1
+       done
+
+    sgdisk --sort /dev/$ssdVar >/dev/null 2>&1
+    var=$(( $i + 1 ))
+    sgdisk --backup=$saveDIR/SSD/00_SSD_CLEANED_PARTITIONS_$var.gpt /dev/$ssdVar >/dev/null 2>&1
+
+
+    totalSSDpartitions=$(grep -c $ssdVar"p"[0-9] /proc/partitions)
+    totalHDDpartitions=$(grep -c $hddVar[0-9] /proc/partitions)
+done
+pause
+
+#### PRINT BACKED UP TABLES
+clear
+echo "PRINTING BACKED UP TABLES"
+for (( i=1; i<=$numberofWininstalls; i++ ))
+do
+sgdisk -l $saveDIR/SSD/Windows10_$i/00_SSD_Windows10_$i.gpt /dev/$ssdVar >/dev/null 2>&1; sudo sgdisk -p /dev/nvme0n1
+done
+
+
+
+
+
+
+
