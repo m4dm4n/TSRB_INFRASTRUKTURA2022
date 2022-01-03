@@ -1,12 +1,17 @@
 #!/bin/bash
 
+# DELETE BACKUP FOLDER
+rm -r ~/BACKUP
+
+
+
 # Define SSD and HDD
 #---------------------------
 sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
 
-read -n 7 -p $'Select SSD: \n' ssdVar
+read -e -n 7 -p $'Select SSD: \n' ssdVar
 echo -e "\n"
-read -n 3 -p $'Select HDD: \n' hddVar
+read -e -n 3 -p $'Select HDD: \n' hddVar
 echo -e "\n"
 
 sgdisk -p /dev/$ssdVar
@@ -29,3 +34,4 @@ select yn in "Yes" "No";do
           ;;
      esac
 done
+

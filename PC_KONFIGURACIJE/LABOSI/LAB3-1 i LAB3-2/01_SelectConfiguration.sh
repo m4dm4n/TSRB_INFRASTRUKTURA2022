@@ -55,13 +55,14 @@ echo -e "\n"
 
 case $pcConf in
 
-1) echo "Calling script1";;
-
+1) echo "Calling script1"
+   ./02_pcConf1.sh
+   ;;
 2) echo "Calling script23 for further info"
-   ./pcConf23.sh
+   ./03_pcConf23.sh
    ;;
 4) echo "Calling script4"
-   ./pcConf4.sh
+   ./06_pcConf4.sh
    ;;
 Error) echo "Something is wrong";;
 
