@@ -22,13 +22,13 @@ function pause(){
 # Getting some info
 #-----------------------
 echo "Gathering some informations"
-echo -e "\n"
+echo -e "\\n"
 echo "Listing all NVME and HDD storage devices"
 fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
-echo -e "\n"
+echo -e "\\n"
 echo "NVME size is: " $nvmeSizeinGB "GB"
 echo "HDD size is: " $hddSizeinGB "GB"
-echo -e "\n"
+echo -e "\\n"
 
 
 if [ $nvmeSizeinGB -lt "300" ]
@@ -47,7 +47,7 @@ else
 echo "Can't recognize PCconfiguration"
 pcConf="Error"
 fi
-echo -e "\n"
+echo -e "\\n"
 
 
 # Main script code

@@ -22,16 +22,16 @@ linHomeinGB=30
 winEfiPartinMB=500
 msrPartinMB=128
 winRecoveryPartinMB=10240
-winRecoveryPartinGB=$(( $winRecoveryPartinMB / 1024 ))
+winRecoveryPartinGB=$(( winRecoveryPartinMB / 1024 ))
 
 linuxHomeNeeded=false
 
 
 # Calculate NVME free space
 TotalFreeSectorsNVME=$(sgdisk -p /dev/nvme0n1 | grep 'Total free space' | cut -d " " -f 5)
-TotalFreeinBNVME=$((TotalFreeSectorsNVME*512))
-TotalFreeinMBNVME=$((TotalFreeinBNVME/1024/1024))
-TotalFreeinGBNVME=$((TotalFreeinMBNVME/1024))
+TotalFreeinBNVME=$(( TotalFreeSectorsNVME * 512 ))
+TotalFreeinMBNVME=$(( TotalFreeinBNVME / 1024 / 1024 ))
+TotalFreeinGBNVME=$(( TotalFreeinMBNVME / 1024 ))
 
 
 
@@ -60,7 +60,7 @@ do
         export numberofWininstalls
         export winSystemPartSize
         export dataPartsize
-        if [ numberofWininstalls > 1 ]
+        if [ $numberofWininstalls -gt 1 ]
            then
                linuxHomeNeeded=true
                export linuxHomeNeeded
