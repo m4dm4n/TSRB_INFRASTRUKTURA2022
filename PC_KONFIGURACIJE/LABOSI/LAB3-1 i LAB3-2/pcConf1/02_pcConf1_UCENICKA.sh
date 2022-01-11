@@ -107,7 +107,19 @@ sgdisk -p /dev/$hddVar
 
 pause
 
-
+### CREATE FILESYSTEMS
+# EFI FAT32 FILESYSTEM
+for s in $(sgdisk -p /dev/$ssdVar | grep EF00 | cut -d " " -f3,4);do mkfs.vfat -F 32 /dev/"$ssdVar"p"$s";done
+# LINUX SWAP FILESYSTEM
+for s in $(sgdisk -p /dev/$ssdVar | grep 8200 | cut -d " " -f3,4);do mkswap /dev/"$ssdVar"p"$s";done
+# LINUX ROOT EXT4 FILESYSTEM
+for s in $(sgdisk -p /dev/$ssdVar | grep 8304 | cut -d " " -f3,4);do mkfs.ext4 /dev/"$ssdVar"p"$s";done
+# LINUX HOME EXT4 FILESYSTEM
+for s in $(sgdisk -p /dev/$ssdVar | grep 8302 | cut -d " " -f3,4);do mkfs.ext4 /dev/"$ssdVar"p"$s";done
+# WINDOWS NTFS FILESYSTEM
+for s in $(sgdisk -p /dev/$ssdVar | grep 0700 | cut -d " " -f3,4);do mkfs.ntfs -Q /dev/"$ssdVar"p"$s";done
+# WINDOWS RECOVERY NTFS FILESYSTEM
+for s in $(sgdisk -p /dev/$ssdVar | grep 2700 | cut -d " " -f3,4);do mkfs.ntfs -Q /dev/"$ssdVar"p"$s";done
 
 # BACKUP GPT TABLES
 # The resulting file is a binary file consisting of the protective MBR, the main GPT 
