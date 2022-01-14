@@ -14,7 +14,7 @@
 PS3="Racunalo ce biti nastavnicko, kabinetsko ili ucenicko: "
 
 # Predefined partition sizes
-linEfiPartinMB=300
+linEfiPartinMB=500
 linSwapinGB=16
 linRootinGB=50
 linHomeinGB=30
@@ -24,15 +24,28 @@ msrPartinMB=128
 winRecoveryPartinMB=10240
 winRecoveryPartinGB=$(( winRecoveryPartinMB / 1024 ))
 
-linuxHomeNeeded=false
+linuxHomeNeeded=0
+
+
+# Define functions here
+#-----------------------
+function pause(){
+ read -s -n 1 -p "Press any key to continue . . ."
+ echo ""
+}
+#-----------------------
 
 
 # Calculate NVME free space
-TotalFreeSectorsNVME=$(sgdisk -p /dev/nvme0n1 | grep 'Total free space' | cut -d " " -f 5)
+TotalFreeSectorsNVME=$(sgdisk -p /dev/$ssdVar | grep 'Total free space' | cut -d " " -f 5)
 TotalFreeinBNVME=$(( TotalFreeSectorsNVME * 512 ))
 TotalFreeinMBNVME=$(( TotalFreeinBNVME / 1024 / 1024 ))
 TotalFreeinGBNVME=$(( TotalFreeinMBNVME / 1024 ))
-
+# Calculate HDD free space
+TotalFreeSectorsHDD=$(sgdisk -p /dev/$hddVar | grep 'Total free space' | cut -d " " -f 5)
+TotalFreeinBHDD=$(( TotalFreeSectorsHDD * 512 ))
+TotalFreeinMBHDD=$(( TotalFreeinBHDD / 1024 / 1024 ))
+TotalFreeinGBHDD=$(( TotalFreeinMBHDD / 1024 ))
 
 
 #### MAIN CODE STARTS HERE
@@ -45,11 +58,13 @@ do
 
         nastavnicko)
         echo "Pozivam skriptu za particioniranje nastavnickog racunala"
+        pause
         ./pcConf1/02_pcConf1_NASTAVNICKA.sh
 		exit
         ;;
         kabinetsko)
         echo "Pozivam skriptu za particioniranje kabinetskog racunala"
+        pause
         ./pcConf1/02_pcConf1_KABINETI.sh
         exit
 	;;
@@ -62,15 +77,24 @@ do
         export dataPartsize
         if [ $numberofWininstalls -gt 1 ]
            then
-               linuxHomeNeeded=true
+               linuxHomeNeeded=1
                export linuxHomeNeeded
                echo "Potrebno je stvoriti Linux Home Particije"
-               requiredDiskSpace=$((linEfiPartinMB+(linSwapinGB*1024)+(linRootinGB*1024)+(linHomeinGB*1024)+((numberofWininstalls+1)*winEfiPartinMB)+((numberofWininstalls+1)*msrPartinMB)+((numberofWininstalls+1)*winSystemPartSize*1024)+((numberofWininstalls+1)*winRecoveryPartinMB)))
-               if [ $requiredDiskSpace -gt $TotalFreeinMBNVME ]; then echo "Nema dovoljno prostora na disku za zahtjeve"; echo "Potrebno je "$((requiredDiskSpace/1024))"GB prostora, no slobodno je samo "$TotalFreeinGBNVME"GB"; exit 1; fi
+               requiredSSDSpace=$((linEfiPartinMB+(linSwapinGB*1024)+(linRootinGB*1024)+(linHomeinGB*1024)+((numberofWininstalls+1)*winEfiPartinMB)+((numberofWininstalls+1)*msrPartinMB)+((numberofWininstalls+1)*winSystemPartSize*1024)+((numberofWininstalls+1)*winRecoveryPartinMB)))
+               if [ $requiredSSDSpace -gt $TotalFreeinMBNVME ]; then echo "Nema dovoljno prostora na disku za zahtjeve"; echo "Potrebno je "$((requiredSSDSpace/1024))"GB prostora, no slobodno je samo "$TotalFreeinGBNVME"GB"; exit 1; fi
         fi
-        requiredDiskSpace=$(())
+        requiredSTOREspaceGB=$(( numberofWininstalls * 50 ))
+        export requiredSTOREspaceGB
+        TotalFreeSectorsHDD=$(sgdisk -p /dev/$hddVar | grep 'Total free space' | cut -d " " -f 5)
+        TotalFreeinGBHDD=$(( TotalFreeSectorsHDD * 512 / 1024 / 1024 / 1024 ))
+        requiredHDDSpaceGB=$(( numberofWininstalls * dataPartsize + requiredSTOREspaceGB ))
+        if [ $requiredHDDSpaceGB -gt $TotalFreeinGBHDD ]; then echo "Nema dovoljno prostora na disku za zahtjeve"; echo "Potrebno je "$requiredHDDSpaceGB"GB prostora, no slobodno je samo "$TotalFreeinGBHDD"GB"; exit 1; fi
         echo "Broj win instalacija: " $numberofWininstalls
+        echo "Potreban prostor za BACKUP particiju: " $requiredSTOREspaceGB"GB"
+        echo "Potreban prostor na SSD: " $((requiredSSDSpace/1024))"GB"
+        echo "Potreban prostor na HDD: " $requiredHDDSpaceGB"GB"
         echo "Pozivam skriptu za particioniranje ucenickog racunala"
+        pause
         ./pcConf1/02_pcConf1_UCENICKA.sh
         exit
 	;;

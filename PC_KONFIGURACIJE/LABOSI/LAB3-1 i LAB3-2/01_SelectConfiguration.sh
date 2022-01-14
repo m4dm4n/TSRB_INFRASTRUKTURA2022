@@ -1,14 +1,24 @@
 #!/bin/bash
 
+# Define SSD and HDD
+#---------------------------
+sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
+read -e -n 7 -p $'Odaberi SSD: \n' ssdVar
+echo -e "\n"
+read -e -n 3 -p $'Odaberi HDD: \n' hddVar
+echo -e "\n"
+export ssdVar
+export hddVar
+#---------------------------
+
 # Define variables here
 #-----------------------
 PS3="Select the location of PC: "
-nvmeSize=$(fdisk -l | grep nvme | cut -d " " -f5)
-hddSize=$(fdisk -l | grep sda | cut -d " " -f5)
+nvmeSize=$(fdisk -l | grep $ssdVar | cut -d " " -f5)
+hddSize=$(fdisk -l | grep $hddVar | cut -d " " -f5)
 nvmeSizeinGB=$(( nvmeSize / 1024 / 1024 / 1024 ))
 hddSizeinGB=$(( hddSize / 1024 / 1024 / 1024 ))
 #-----------------------
-
 
 # Define functions here
 #-----------------------
@@ -21,30 +31,30 @@ function pause(){
 
 # Getting some info
 #-----------------------
-echo "Gathering some informations"
+echo "Skupljam informacije o sustavu..."
 echo -e "\\n"
-echo "Listing all NVME and HDD storage devices"
+echo "Prikazujem sve NVME i HDD uredjaje"
 fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
 echo -e "\\n"
-echo "NVME size is: " $nvmeSizeinGB "GB"
-echo "HDD size is: " $hddSizeinGB "GB"
+echo "Velicina NVME diska: " $nvmeSizeinGB "GB"
+echo "Velicina HDD diska: " $hddSizeinGB "GB"
 echo -e "\\n"
 
 
 if [ $nvmeSizeinGB -lt "300" ]
 then 
-echo "This is PC_CONFIGURATION_1"
+echo "Ovo je PC_CONFIGURATION_1"
 pcConf=1
 elif [ $nvmeSizeinGB -gt "400" -a $nvmeSizeinGB -lt "1500" ]
 then 
-echo "This is PC_CONFIGURATION_2 or PC_CONFIGURATION_3"
+echo "Ovo je PC_CONFIGURATION_2 ili PC_CONFIGURATION_3"
 pcConf=2
 elif [ $nvmeSizeinGB -gt "1500" ]
 then 
-echo "This is PC_CONFIGURATION_4"
+echo "Ovo je PC_CONFIGURATION_4"
 pcConf=4
 else
-echo "Can't recognize PCconfiguration"
+echo "Ne prepoznajem konfiguraciju"
 pcConf="Error"
 fi
 echo -e "\\n"
@@ -55,15 +65,18 @@ echo -e "\\n"
 
 case $pcConf in
 
-1) echo "Calling script1"
+1) echo "Pozivam skriptu 1"
+   pause
    ./02_pcConf1.sh
    ;;
-2) echo "Calling script23 for further info"
+2) echo "Pozivam skriptu 2/3 za detaljniji odabir"
+   pause
    ./03_pcConf23.sh
    ;;
-4) echo "Calling script4"
+4) echo "Pozivam skriptu 4"
+   pause
    ./06_pcConf4.sh
    ;;
-Error) echo "Something is wrong";;
+Error) echo "Nesto nije u redu";;
 
 esac
