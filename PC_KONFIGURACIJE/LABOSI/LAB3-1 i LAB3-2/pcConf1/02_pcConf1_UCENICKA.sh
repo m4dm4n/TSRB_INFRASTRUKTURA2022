@@ -253,17 +253,98 @@ done
 echo "Gotovo"
 pause
 
+
+# Saving Windows populated STORE partitions
+echo "Spremam Backup Store GPT strukture sa Windows sustavima"
+for (( i=1; i<=numberofWininstalls; i++ ))
+do
+mkdir $saveDIR/SSD/Windows10_STORE_"$i"
+done
+
+mkdir $saveDIR/SSD/Windows10_STORE_TEMP
+
+# Restore full GPT
+sgdisk --load-backup=$saveDIR/SSD/00_SSD_ALLPARTITIONS.gpt /dev/"$ssdVar" >/dev/null 2>&1
+
+# Recalculate partitions 
+totalSSDpartitions=$(grep -c "$ssdVar""p"[0-9] /proc/partitions)
+totalHDDpartitions=$(grep -c "$hddVar"[0-9] /proc/partitions)
+
+# Delete  Linux partitions
+echo "Brisem Linux particije"
+
+for (( i=1; i<=4; i++ ))
+     do
+       sgdisk -d "$i" /dev/$ssdVar >/dev/null 2>&1
+     done
+     sgdisk --sort /dev/$ssdVar
+echo "Gotovo"
+
+# Backup Cleaned GPT structure
+sgdisk --backup=$saveDIR/SSD/Windows10_STORE_TEMP/STORE_CLEANED_PARTITIONS_1.gpt /dev/"$ssdVar" >/dev/null 2>&1
+
+# Saving STORE partition packages
+echo "Spremam PAKETE WindowsStore particija"
+for (( i=1; i<=numberofWininstalls; i++ ))
+    do
+      echo "$i"" Prolaz"
+      sgdisk --load-backup=$saveDIR/SSD/Windows10_STORE_TEMP/STORE_CLEANED_PARTITIONS_"$i".gpt /dev/"$ssdVar" >/dev/null 2>&1
+    clear    
+    echo "Ispis prije brisanja tablica "$i
+    sgdisk -p /dev/"$ssdVar"
+    pause
+    sgdisk --sort /dev/"$ssdVar"
+totalSSDpartitions=$(grep -c "$ssdVar""p"[0-9] /proc/partitions)
+for (( j=5; j<=$((totalSSDpartitions-4)); j++ ))
+        do
+          sgdisk -d $j /dev/"$ssdVar" >/dev/null 2>&1
+        done
+    clear    
+    echo "Ispis nakon brisanja tablica "$i
+    sgdisk -p /dev/"$ssdVar"
+    pause
+    sgdisk --sort /dev/"$ssdVar" 
+
+    for (( k=1; k<=4; k++ ))
+       do
+         sgdisk -r $k:$(($k+4)) /dev/"$ssdVar" >/dev/null 2>&1
+       done
+    sgdisk --backup=$saveDIR/SSD/Windows10_STORE_"$i"/00_SSD_Windows10_STORE_"$i".gpt /dev/"$ssdVar" >/dev/null 2>&1
+    dd if=$saveDIR/SSD/Windows10_STORE_"$i"/00_SSD_Windows10_STORE_"$i".gpt bs=512 count=1 > $saveDIR/SSD/Windows10_STORE_"$i"/01_SSD_Windows10_STORE_"$i"_protectiveMBR.gpt
+    dd if=$saveDIR/SSD/Windows10_STORE_"$i"/00_SSD_Windows10_STORE_"$i".gpt bs=512 skip=1 count=1 > $saveDIR/SSD/Windows10_STORE_"$i"/02_SSD_Windows10_STORE_"$i"_primaryHEADER.gpt
+    dd if=$saveDIR/SSD/Windows10_STORE_"$i"/00_SSD_Windows10_STORE_"$i".gpt bs=512 skip=2 count=1 > $saveDIR/SSD/Windows10_STORE_"$i"/04_SSD_Windows10_STORE_"$i"_backupHEADER.gpt
+    dd if=$saveDIR/SSD/Windows10_STORE_"$i"/00_SSD_Windows10_STORE_"$i".gpt bs=512 skip=3 > $saveDIR/SSD/Windows10_STORE_"$i"/03_SSD_Windows10_STORE_"$i"_GPTPartitions.gpt
+
+
+sgdisk --load-backup=$saveDIR/SSD/Windows10_STORE_TEMP/STORE_CLEANED_PARTITIONS_"$i".gpt /dev/"$ssdVar" >/dev/null 2>&1
+for (( j=1; j<=4; j++ ))
+        do
+          sgdisk -d $j /dev/"$ssdVar" >/dev/null 2>&1
+        done 
+  
+    sgdisk --sort /dev/"$ssdVar" 
+    var=$(( $i + 1 ))
+
+    totalSSDpartitions=$(grep -c nvme0n1p[0-9] /proc/partitions)
+    partprobe /dev/"$ssdVar"
+    if [ $totalSSDpartitions -lt 5 ];then echo "Gotovo"; break; fi
+   sgdisk --backup=$saveDIR/SSD/Windows10_STORE_TEMP/STORE_CLEANED_PARTITIONS_"$var".gpt /dev/"$ssdVar" >/dev/null 2>&1
+totalSSDpartitions=$(grep -c "$ssdVar""p"[0-9] /proc/partitions)
+totalHDDpartitions=$(grep -c "$hddVar"[0-9] /proc/partitions)
+done
+
+echo "Gotovo"
+echo "Ispisujem spremljene Store/Windows Backup GPT strukture"
+for (( i=1; i<=numberofWininstalls; i++ ))
+do
+sgdisk -l $saveDIR/SSD/Windows10_STORE_"$i"/00_SSD_Windows10_STORE_"$i".gpt /dev/"$ssdVar" >/dev/null 2>&1; sudo sgdisk -p /dev/"$ssdVar"
+done
+pause
+
+
 #### PRINT BACKED UP TABLES
-clear
 echo "Ispisujem spremljene Windows Backup GPT strukture"
 for (( i=1; i<=numberofWininstalls; i++ ))
 do
 sgdisk -l $saveDIR/SSD/Windows10_"$i"/00_SSD_Windows10_"$i".gpt /dev/"$ssdVar" >/dev/null 2>&1; sudo sgdisk -p /dev/"$ssdVar"
 done
-
-
-
-
-
-
-
