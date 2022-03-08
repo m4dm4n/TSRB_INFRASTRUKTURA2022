@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Define some functions here
+#---------------------------
+function pause(){
+ read -s -n 1 -p "Press any key to continue . . ."
+ echo ""
+}
+#---------------------------
 
 
 # Define some variables here
@@ -7,8 +14,10 @@
 clear
 echo "Skripta za particioniranje ucenickih racunala, konfiguracija 1"
 echo "Broj Windows instalacija: " "$numberofWininstalls"
-echo "Veličina Windows sistemske particije: " "$winSystemPartSize"
-echo "Veličina DATA particije: " "$dataPartsize"
+echo "Veličina Windows sistemske particije: " "$winSystemPartSizeGB"
+echo "Veličina DATA particije: " "$dataPartsizeGB"
+pause
+
 
 # Calculating disk sizes
 nvmeSizeinB=$(fdisk -l | grep nvme | cut -d " " -f5)
@@ -42,16 +51,6 @@ winRecoveryPartinGB=$(( winRecoveryPartinMB / 1024 ))
 #---------------------------
 
 
-# Define some functions here
-#---------------------------
-function pause(){
- read -s -n 1 -p "Press any key to continue . . ."
- echo ""
-}
-#---------------------------
-
-
-
 # PARTITIONING
 
 # Create GPT structure on drives
@@ -60,7 +59,7 @@ sgdisk  --mbrtogpt /dev/"$ssdVar" >/dev/null 2>&1
 sgdisk  --mbrtogpt /dev/"$hddVar" >/dev/null 2>&1
 echo "Gotovo"
 
-# Create Linux HOME partition
+# SSD Create Linux HOME partition
 if [ $linuxHomeNeeded -eq 1 ]
 then
 echo "Stvaram Linux Home particije"
@@ -70,18 +69,18 @@ sgdisk -n 3:0:+"$linRootinGB"GiB -t 0:8304 -c 0:root /dev/"$ssdVar" >/dev/null 2
 sgdisk -n 4:0:+"$linHomeinGB"GiB -t 0:8302 -c 0:home /dev/"$ssdVar" >/dev/null 2>&1
 echo "Gotovo"
 fi
-# Create Windows partitions
+# SSD Create Windows partitions
 echo "Stvaram Windows particije"
 for (( i=1; i<=numberofWininstalls; i++ ))
 do
 sgdisk -n 0:0:+"$winEfiPartinMB"MiB -t 0:ef00 -c 0:"EFI System Partition" /dev/"$ssdVar" >/dev/null 2>&1
 sgdisk -n 0:0:+"$msrPartinMB"MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/"$ssdVar" >/dev/null 2>&1
-sgdisk -n 0:0:+"$winSystemPartSize"GiB -t 0:0700 -c 0:"Windows11"  /dev/"$ssdVar" >/dev/null 2>&1
+sgdisk -n 0:0:+"$winSystemPartSizeGB"GiB -t 0:0700 -c 0:"Windows11"  /dev/"$ssdVar" >/dev/null 2>&1
 sgdisk -n 0:0:+"$winRecoveryPartinMB"MiB -t 0:2700 -c 0:"MS Recovery"  /dev/"$ssdVar" >/dev/null 2>&1
 done
 echo "Gotovo"
 
-# Create BACKUP partition
+# SSD Create BACKUP partition
 echo "Stvaram BACKUP particiju"
 TotalFreeSectorsNVME=$(sgdisk -p /dev/"$ssdVar" | grep 'Total free space' | cut -d " " -f 5)
 TotalFreeinBNVME=$(( TotalFreeSectorsNVME * 512 ))
@@ -96,6 +95,19 @@ sgdisk -n 0:0:+"$winRecoveryPartinMB"MiB -t 0:2700 -c 0:"MS Recovery"  /dev/"$ss
 echo "Gotovo"
 
 
+# HDD Create winSystem DATA and BACKUP partitions
+clear
+echo "Stvaram  winSystem DATA particije"
+for (( i=1; i<=numberofWininstalls; i++ ))
+do
+echo "$i prolaz"
+sgdisk -n $i:0:+"$dataPartsizeGB"GiB -t 0:0700 -c 0:"DATA$i"  /dev/"$hddVar" >/dev/null 2>&1
+sgdisk -p /dev/sda
+done
+
+sgdisk -n 0:0:+"$requiredSTOREspaceGB"GiB -t 0:0700 -c 0:"STORE"  /dev/"$hddVar" >/dev/null 2>&1
+
+
 # Done , print GPT structures
 echo "Ispis GPT struktura"
 sgdisk -p /dev/"$ssdVar"
@@ -105,7 +117,8 @@ pause
 
 
 # PUT HIDDEN ATTRIBUTE ON MS RECOVERY PARTITIONS 
-for s in $(sgdisk -p /dev/"$ssdVar" | grep 2700 | cut -d " " -f3,4);do sgdisk --attributes="$i":set:0:2 /dev/"$ssdVar"p"$s" >/dev/null 2>&1;done
+# JE LI OVO STVARNO POTREBNO???
+#for s in $(sgdisk -p /dev/"$ssdVar" | grep 2700 | cut -d " " -f3,4);do sgdisk --attributes="$s":set:0:2 /dev/"$ssdVar"p"$s" >/dev/null 2>&1;done
 
 ### CREATE FILESYSTEMS
 echo "Stvaram datotecne sustave na particijama"
@@ -121,7 +134,15 @@ for s in $(sgdisk -p /dev/"$ssdVar" | grep 8302 | cut -d " " -f3,4);do mkfs.ext4
 for s in $(sgdisk -p /dev/"$ssdVar" | grep 0700 | cut -d " " -f3,4);do mkfs.ntfs -Q /dev/"$ssdVar"p"$s" >/dev/null 2>&1;done
 # WINDOWS RECOVERY NTFS FILESYSTEM
 for s in $(sgdisk -p /dev/"$ssdVar" | grep 2700 | cut -d " " -f3,4);do mkfs.ntfs -Q /dev/"$ssdVar"p"$s" >/dev/null 2>&1;done
+
+# WINDOWS DATA NTFS FILESYSTEM
+for s in $(sgdisk -p /dev/"$hddVar" | grep 0700 | cut -d " " -f3,4);do mkfs.ntfs -Q /dev/"$hddVar""$s" >/dev/null 2>&1;done
+
+
 echo "Gotovo"
+
+
+
 
 # BACKUP GPT TABLES
 # The resulting file is a binary file consisting of the protective MBR, the main GPT 
@@ -340,6 +361,37 @@ do
 sgdisk -l $saveDIR/SSD/Windows10_STORE_"$i"/00_SSD_Windows10_STORE_"$i".gpt /dev/"$ssdVar" >/dev/null 2>&1; sudo sgdisk -p /dev/"$ssdVar"
 done
 pause
+
+
+
+
+# Saving HDD DATA partitions 
+totalHDDpartitions=$(grep -c "$hddVar"[0-9] /proc/partitions)
+echo "Spremam HDD DATA GPT strukture"
+for (( i=1; i<=numberofWininstalls; i++ ))
+    do
+      sgdisk --load-backup=$saveDIR/HDD/00_HDD_CLEANED_PARTITIONS_"$i".gpt /dev/"$hddVar" >/dev/null 2>&1
+      for (( j=2; j<=totalHDDpartitions; j++ ))
+        do
+          sgdisk -d "$j" /dev/"$hddVar" >/dev/null 2>&1
+        done
+    sgdisk --backup=$saveDIR/HDD/Windows10_"$i"/00_HDD_Windows10_"$i".gpt /dev/"$hddVar" >/dev/null 2>&1
+    dd if=$saveDIR/HDD/Windows10_"$i"/00_HDD_Windows10_"$i".gpt bs=512 count=1 > $saveDIR/HDD/Windows10_"$i"/01_HDD_Windows10_"$i"_protectiveMBR.gpt
+    dd if=$saveDIR/HDD/Windows10_"$i"/00_HDD_Windows10_"$i".gpt bs=512 skip=1 count=1 > $saveDIR/HDD/Windows10_"$i"/02_HDD_Windows10_"$i"_primaryHEADER.gpt
+    dd if=$saveDIR/HDD/Windows10_"$i"/00_HDD_Windows10_"$i".gpt bs=512 skip=2 count=1 > $saveDIR/HDD/Windows10_"$i"/04_HDD_Windows10_"$i"_backupHEADER.gpt
+    dd if=$saveDIR/HDD/Windows10_"$i"/00_HDD_Windows10_"$i".gpt bs=512 skip=3 > $saveDIR/HDD/Windows10_"$i"/03_HDD_Windows10_"$i"_GPTPartitions.gpt
+
+    sgdisk --load-backup=$saveDIR/HDD/00_HDD_CLEANED_PARTITIONS_"$i".gpt /dev/"$hddVar" >/dev/null 2>&1
+
+    sgdisk -r 1:$((i+1)) /dev/"$hddVar" >/dev/null 2>&1
+
+    var=$(( i + 1 ))
+    sgdisk --backup=$saveDIR/HDD/00_HDD_CLEANED_PARTITIONS_$var.gpt /dev/"$hddVar" >/dev/null 2>&1
+done
+echo "Gotovo"
+pause
+
+
 
 
 #### PRINT BACKED UP TABLES
