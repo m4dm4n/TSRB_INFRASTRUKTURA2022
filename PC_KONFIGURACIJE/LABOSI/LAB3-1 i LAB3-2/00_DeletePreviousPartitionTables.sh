@@ -9,9 +9,9 @@ rm -r ~/BACKUP
 #---------------------------
 sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
 
-read -e -n 7 -p $'Select SSD: \n' ssdVar
+read -e -n 7 -p $'Odaberi SSD: \n' ssdVar
 echo -e "\n"
-read -e -n 3 -p $'Select HDD: \n' hddVar
+read -e -n 3 -p $'Odaberi HDD: \n' hddVar
 echo -e "\n"
 
 sgdisk -p /dev/$ssdVar
@@ -22,16 +22,32 @@ sgdisk -p /dev/$hddVar
 
 echo "Slijedeci korak je brisanje GPT tablica sa svih diskova, nastavak?"
 
-select yn in "Yes" "No";do
+select yn in "Da" "Ne";do
      case $yn in
-          Yes)
+          Da)
           sudo sgdisk -Z /dev/$ssdVar
           sudo sgdisk -Z /dev/$hddVar
           exit
           ;;
-          No)
+          Ne)
           exit
           ;;
      esac
 done
 
+
+#### CALLING SELECT_CONF SCRIPT
+
+echo "Slijedeci korak je poziv skripte za automatski odabir konfiguracije, nastavak?"
+
+select yn in "Da" "Ne";do
+     case $yn in
+          Da)
+          01_SelectConfiguration.sh
+          exit
+          ;;
+          Ne)
+          exit
+          ;;
+     esac
+done

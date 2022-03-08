@@ -13,7 +13,7 @@ export hddVar
 
 # Define variables here
 #-----------------------
-PS3="Select the location of PC: "
+PS3="Odaberi lokaciju računala: "
 nvmeSize=$(fdisk -l | grep $ssdVar | cut -d " " -f5)
 hddSize=$(fdisk -l | grep $hddVar | cut -d " " -f5)
 nvmeSizeinGB=$(( nvmeSize / 1024 / 1024 / 1024 ))
@@ -23,7 +23,7 @@ hddSizeinGB=$(( hddSize / 1024 / 1024 / 1024 ))
 # Define functions here
 #-----------------------
 function pause(){
- read -s -n 1 -p "Press any key to continue . . ."
+ read -s -n 1 -p "Pritisni bilo koju tipku za nastavak . . ."
  echo ""
 }
 
@@ -36,8 +36,8 @@ echo -e "\\n"
 echo "Prikazujem sve NVME i HDD uredjaje"
 fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
 echo -e "\\n"
-echo "Velicina NVME diska: " $nvmeSizeinGB "GB"
-echo "Velicina HDD diska: " $hddSizeinGB "GB"
+echo "Veličina NVME diska: " $nvmeSizeinGB "GB"
+echo "Veličina HDD diska: " $hddSizeinGB "GB"
 echo -e "\\n"
 
 
@@ -77,6 +77,6 @@ case $pcConf in
    pause
    ./06_pcConf4.sh
    ;;
-Error) echo "Nesto nije u redu";;
+Error) echo "Nešto nije u redu";;
 
 esac
