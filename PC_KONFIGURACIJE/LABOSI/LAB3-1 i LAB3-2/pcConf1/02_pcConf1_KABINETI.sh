@@ -22,12 +22,12 @@ winRecoveryPartinGB=$(($winRecoveryPartinMB/1024))
 
 # Define SSD and HDD
 #---------------------------
-sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
-
-read -e -n 7 -p $'Odaberi SSD iz popisa: \n' ssdVar
-echo -e "\n"
-read -e -n 3 -p $'Odaberi HDD iz popisa: \n' hddVar
-echo -e "\n"
+#sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
+#
+#read -e -n 7 -p $'Odaberi SSD iz popisa: \n' ssdVar
+#echo -e "\n"
+#read -e -n 3 -p $'Odaberi HDD iz popisa: \n' hddVar
+#echo -e "\n"
 
 #---------------------------
 

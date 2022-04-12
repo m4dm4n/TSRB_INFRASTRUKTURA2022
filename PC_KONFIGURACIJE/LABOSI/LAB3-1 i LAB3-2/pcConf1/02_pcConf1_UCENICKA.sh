@@ -29,9 +29,9 @@ hddSizeinGB=$(( hddSizeinB / 1024 / 1024 / 1024 ))
 
 # Linux UEFI/GPT partition sizes
 linEfiPartinMB=500
-linSwapinGB=16
+linSwapinGB=8
 linRootinGB=50
-linHomeinGB=30
+linHomeinGB=10
 
 # Windows UEFI/GPT partition sizes
 winEfiPartinMB=500
@@ -41,6 +41,25 @@ winRecoveryPartinGB=$(( winRecoveryPartinMB / 1024 ))
 #---------------------------
 
 
+# Create folders
+echo "Stvaram direktorije za Backup GPT struktura"
+export saveDIR=~/BACKUP
+mkdir -p ~/BACKUP/HDD
+mkdir -p ~/BACKUP/SSD/Linux1
+
+
+for (( i=1; i<=$(( numberofWininstalls + 1 )); i++ ))
+do
+mkdir ~/BACKUP/HDD/Windows10_"$i"
+done
+
+
+for (( i=1; i<=numberofWininstalls; i++ ))
+do
+mkdir ~/BACKUP/SSD/Windows10_"$i"
+done
+echo "Gotovo"
+
 # Define SSD and HDD
 #---------------------------
 #sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
@@ -49,6 +68,16 @@ winRecoveryPartinGB=$(( winRecoveryPartinMB / 1024 ))
 #read -e -n 3 -p $'Select HDD: \n' hddVar
 #echo -e "\n"
 #---------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 # PARTITIONING
@@ -120,6 +149,18 @@ pause
 # JE LI OVO STVARNO POTREBNO???
 #for s in $(sgdisk -p /dev/"$ssdVar" | grep 2700 | cut -d " " -f3,4);do sgdisk --attributes="$s":set:0:2 /dev/"$ssdVar"p"$s" >/dev/null 2>&1;done
 
+
+
+
+
+
+
+
+
+
+
+
+
 ### CREATE FILESYSTEMS
 echo "Stvaram datotecne sustave na particijama"
 # EFI FAT32 FILESYSTEM
@@ -144,27 +185,27 @@ echo "Gotovo"
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # BACKUP GPT TABLES
 # The resulting file is a binary file consisting of the protective MBR, the main GPT 
 # header, the backup GPT header, and one copy of the partition table, in that order. 
-echo "Stvaram direktorije za Backup GPT struktura"
-export saveDIR=~/BACKUP
-mkdir -p ~/BACKUP/HDD
-mkdir ~/BACKUP/HDD/Linux1
 
-for (( i=1; i<=numberofWininstalls; i++ ))
-do
-mkdir ~/BACKUP/HDD/Windows10_"$i"
-done
 
-mkdir ~/BACKUP/SSD
-mkdir ~/BACKUP/SSD/Linux1
-
-for (( i=1; i<=numberofWininstalls; i++ ))
-do
-mkdir ~/BACKUP/SSD/Windows10_"$i"
-done
-echo "Gotovo"
 
 # BACKUP FULL TABLES
 echo "Spremam GPT sa svim particijama na diskovima"
@@ -189,6 +230,7 @@ dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=1 count=1 > $saveDIR/SSD
 dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=2 count=1 > $saveDIR/SSD/Linux1/04_SSD_Linux1_backupHEADER.gpt
 dd if=$saveDIR/SSD/Linux1/00_SSD_Linux1.gpt bs=512 skip=3 > $saveDIR/SSD/Linux1/03_SSD_Linux1_GPTPartitions.gpt
 echo "Gotovo"
+
 
 # RESTORE BACKUP GPT WITH ALL PARTITIONS
 sudo sgdisk --load-backup=$saveDIR/SSD/00_SSD_ALLPARTITIONS.gpt /dev/"$ssdVar" >/dev/null 2>&1
@@ -228,13 +270,10 @@ for (( i=totalSSDpartitions; i>$((totalSSDpartitions-4)); i-- ))
 sgdisk --sort /dev/"$ssdVar" >/dev/null 2>&1
 sgdisk --backup=$saveDIR/SSD/00_SSD_CLEANED_PARTITIONS_1.gpt /dev/"$ssdVar" >/dev/null 2>&1
 
-
-
 # New partition number calculating
 totalSSDpartitions=$(grep -c "$ssdVar""p"[0-9] /proc/partitions)
 totalHDDpartitions=$(grep -c "$hddVar"[0-9] /proc/partitions)
 echo "Ukupno ima ""$totalSSDpartitions"" Particija"
-
 
 # Saving Windows partitions
 echo "Spremam Backup Windows GPT strukture"
@@ -364,11 +403,12 @@ pause
 
 
 
-
 # Saving HDD DATA partitions 
 totalHDDpartitions=$(grep -c "$hddVar"[0-9] /proc/partitions)
-echo "Spremam HDD DATA GPT strukture"
-for (( i=1; i<=numberofWininstalls; i++ ))
+echo "Spremam HDD DATA i STORE GPT strukture"
+sgdisk --backup=$saveDIR/HDD/00_HDD_CLEANED_PARTITIONS_1.gpt /dev/"$hddVar"
+
+for (( i=1; i<=$(( numberofWininstalls+1 )); i++ ))
     do
       sgdisk --load-backup=$saveDIR/HDD/00_HDD_CLEANED_PARTITIONS_"$i".gpt /dev/"$hddVar" >/dev/null 2>&1
       for (( j=2; j<=totalHDDpartitions; j++ ))
