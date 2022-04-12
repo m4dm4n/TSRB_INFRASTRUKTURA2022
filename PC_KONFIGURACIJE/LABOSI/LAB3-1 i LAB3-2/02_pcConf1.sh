@@ -1,5 +1,8 @@
 #!/bin/bash
-
+clear
+echo "--------------------------------------------------"
+echo "Ovo je skripta za 1. konfiguraciju (250GB NVME, 1TB HDD)"
+echo "--------------------------------------------------"
 # Available different locations and configurations
 # 01) PRAKSA_ELEKTROTEHNIKA_NASTAVNICKO (3)
 # 02) PRAKSA_STROJARSTVO_NASTAVNICKO (1)
@@ -15,9 +18,9 @@ PS3="Računalo ce biti nastavničko, kabinetsko ili učeničko: "
 
 # Predefined partition sizes
 linEfiPartinMB=500
-linSwapinGB=16
+linSwapinGB=8
 linRootinGB=50
-linHomeinGB=30
+linHomeinGB=10
 
 winEfiPartinMB=500
 msrPartinMB=128

@@ -1,11 +1,15 @@
 #!/bin/bash
+clear
+echo "--------------------------------------------------"
+echo "Ovo je skripta za automatski odabir konfiguracije"
+echo "--------------------------------------------------"
 
 # Define SSD and HDD
 #---------------------------
 sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
-read -e -n 7 -p $'Odaberi SSD: \n' ssdVar
+read -e -n 7 -p $'Odaberi sistemski disk: \n' ssdVar
 echo -e "\n"
-read -e -n 3 -p $'Odaberi HDD: \n' hddVar
+read -e -n 3 -p $'Odaberi disk za podatke: \n' hddVar
 echo -e "\n"
 export ssdVar
 export hddVar
@@ -45,7 +49,7 @@ if [ $nvmeSizeinGB -lt "300" ]
 then 
 echo "Ovo je PC_CONFIGURATION_1"
 pcConf=1
-elif [ $nvmeSizeinGB -gt "400" -a $nvmeSizeinGB -lt "1500" ]
+elif [ $nvmeSizeinGB -gt "400" ] && [ $nvmeSizeinGB -lt "1500" ]
 then 
 echo "Ovo je PC_CONFIGURATION_2 ili PC_CONFIGURATION_3"
 pcConf=2

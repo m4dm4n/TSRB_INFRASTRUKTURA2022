@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# Define some functions here
+#---------------------------
+
+# Pause function
+function pause(){
+ read -s -n 1 -p "Press any key to continue . . ."
+ echo ""
+}
+
+clear
+echo "--------------------------------------------------"
+echo "Ovo je skripta za 4. konfiguraciju (2TB NVME, 4TB HDD)"
+echo "--------------------------------------------------"
+
+echo "--------------------------------------------------"
+echo "OPREZ HDD je za OS i SSD je za DATA/VIRTUALNE STROJEVE"
+echo "--------------------------------------------------"
+pause 
 # Available different locations and configurations
 # LAB31_32_NASTAVNICKO (2)
 # LAB31_32_UCENICKO (24)
@@ -14,12 +32,12 @@ nvmeSizeinMB=$(( nvmeSize / 1024 / 1024 ))
 hddSizeinGB=$(( hddSize / 1024 / 1024 / 1024 ))
 hddSizeinMB=$(( hddSize / 1024 / 1024 ))
 
-linEfiPartinMB=300
-linSwapinGB=16
-linRootinMB=50
-linHomeinMB=30
+linEfiPartinMB=500
+linSwapinGB=8
+linRootinGB=50
+linHomeinGB=10
 
-winEfiPartinMB=300
+winEfiPartinMB=500
 msrPartinMB=128
 winRecoveryPartinMB=10240
 winRecoveryPartinGB=$(( winRecoveryPartinMB / 1024 ))
@@ -37,14 +55,7 @@ echo -e "\n"
 
 #---------------------------
 
-# Define some functions here
-#---------------------------
 
-# Pause function
-function pause(){
- read -s -n 1 -p "Press any key to continue . . ."
- echo ""
-}
 
 
 # Create Partitions for TeacherPC
@@ -84,8 +95,8 @@ exit
 
 
 # Create Partitions for StudentPC
-functions StudentPCpartitioning(){
-
+function StudentPCpartitioning()
+{
 # Convert all drives to GPT format
 sgdisk --mbrtogpt /dev/$ssdVar
 sgdisk --mbrtogpt /dev/$hddVar 

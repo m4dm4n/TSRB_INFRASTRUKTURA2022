@@ -1,5 +1,8 @@
 #!/bin/bash
-
+clear
+echo "--------------------------------------------------"
+echo "Ovo je skripta za 2/3. konfiguraciju (1TB NVME, 2TB HDD)"
+echo "--------------------------------------------------"
 # Available different locations and configurations
 # 01) GRUPA 1
 # TC_MULTIMEDIJA_NASTAVNICKO (2)

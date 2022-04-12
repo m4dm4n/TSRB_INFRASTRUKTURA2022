@@ -1,5 +1,8 @@
 #!/bin/bash
-
+clear
+echo "--------------------------------------------------"
+echo "Ovo je skripta za brisanje particija sa diskova"
+echo "--------------------------------------------------"
 # DELETE BACKUP FOLDER
 rm -r ~/BACKUP
 
@@ -27,7 +30,8 @@ select yn in "Da" "Ne";do
           Da)
           sudo sgdisk -Z /dev/$ssdVar
           sudo sgdisk -Z /dev/$hddVar
-          exit
+          break
+#          exit
           ;;
           Ne)
           exit
@@ -43,7 +47,7 @@ echo "Slijedeci korak je poziv skripte za automatski odabir konfiguracije, nasta
 select yn in "Da" "Ne";do
      case $yn in
           Da)
-          01_SelectConfiguration.sh
+          ./01_SelectConfiguration.sh
           exit
           ;;
           Ne)
