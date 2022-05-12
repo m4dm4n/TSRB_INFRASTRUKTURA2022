@@ -42,12 +42,12 @@ done
 
 #### CALLING SELECT_CONF SCRIPT
 
-echo "Slijedeci korak je poziv skripte za automatski odabir konfiguracije, nastavak?"
+echo "Slijedeci korak je poziv skripte za particioniranje, nastavak?"
 
 select yn in "Da" "Ne";do
      case $yn in
           Da)
-          ./01_SelectConfiguration.sh
+          ./01_Partitioning.sh
           exit
           ;;
           Ne)

@@ -122,10 +122,6 @@ TotalFreeinBDataDrive=$(( TotalFreeSectorsDataDrive * 512 ))
 TotalFreeinMBDataDrive=$(( TotalFreeinBDataDrive / 1024 / 1024 ))
 TotalFreeinGBDataDrive=$(( TotalFreeinMBDataDrive / 1024 ))
 
-
-
-
-#### MAIN CODE STARTS HERE
 # Export Variables
 export sysDrive
 export dataDrive
@@ -133,25 +129,49 @@ export numberOfWinInstalls
 export winSystemPartSizeGB
 export dataPartSizeGB
 
+export TotalFreeSectorsSysDrive
+export TotalFreeInBytesSysDrive
+export TotalFreeInMBytesSysDrive
+export TotalFreeInGBytesSysDrive
+
+export TotalFreeSectorsDataDrive
+export TotalFreeinBDataDrive
+export TotalFreeinMBDataDrive
+export TotalFreeinGBDataDrive
+
+export linEfiPartinMB
+export linSwapinGB
+export linRootinGB
+export linHomeinGB
+
+export winEfiPartinMB
+export msrPartinMB
+export winRecoveryPartinMB
+export winRecoveryPartinGB
+
+#### MAIN CODE STARTS HERE
 if [ $numberOfWinInstalls -eq 1 ]; then
 echo "Pozivam skriptu pripreme diskova za 1 instalaciju"
-#./02_SingleInstall.sh
+./02_SingleInstall.sh
 elif [ $numberOfWinInstalls -gt 1 ]; then
 echo "Potrebno je stvoriti Linux Home Particije"
 linuxHomeNeeded=1
 export linuxHomeNeeded
 echo "Provjera slobodnog prostora za sistemski disk..."
-requiredSSDSpace=$((linEfiPartinMB+(linSwapinGB*1024)+(linRootinGB*1024)+(linHomeinGB*1024)+((numberOfWinInstalls+1)*winEfiPartinMB)\
+requiredSysDriveSpaceMB=$((linEfiPartinMB+(linSwapinGB*1024)+(linRootinGB*1024)+(linHomeinGB*1024)+((numberOfWinInstalls+1)*winEfiPartinMB)\
                 +((numberOfWinInstalls+1)*msrPartinMB)+((numberOfWinInstalls+1)*winSystemPartSizeGB*1024)+((numberOfWinInstalls+1)*winRecoveryPartinMB)))
-     if [ $requiredSSDSpace -gt $TotalFreeinMBNVME ]; then echo "Nema dovoljno prostora na disku za zahtjeve"; \
-     echo "Potrebno je "$((requiredSSDSpace/1024))"GB prostora, no slobodno je samo "$TotalFreeinGBNVME"GB"; exit 1; fi
+     if [ $requiredSysDriveSpaceMB -gt $TotalFreeInMBytesSysDrive ]; then echo "Nema dovoljno prostora na disku za zahtjeve"; \
+     echo "Potrebno je "$((requiredSysDriveSpaceMB/1024))"GB prostora, no slobodno je samo "$TotalFreeInGBytesSysDrive"GB"; exit 1; fi
+export requiredSysDriveSpaceMB
+echo "Sistemski disk ima dovoljno prostora, preostalo je još "$(( TotalFreeInGBytesSysDrive - requiredSysDriveSpaceMB/1024 ))" GB prostora"
 echo "Provjera slobodnog prostora za data disk..."
 requiredSTOREspaceGB=$(( numberofWininstalls * 50 ))
-TotalFreeSectorsHDD=$(sgdisk -p /dev/"$dataDrive" | grep 'Total free space' | cut -d " " -f 5)
-TotalFreeinGBHDD=$(( TotalFreeSectorsHDD * 512 / 1024 / 1024 / 1024 ))
-requiredHDDSpaceGB=$(( numberofWininstalls * dataPartsizeGB + requiredSTOREspaceGB ))
-if [ $requiredHDDSpaceGB -gt $TotalFreeinGBHDD ]; then echo "Nema dovoljno prostora na disku za zahtjeve"; echo "Potrebno je "$requiredHDDSpaceGB"GB prostora, no slobodno je samo "$TotalFreeinGBHDD"GB"; exit 1; fi
 export requiredSTOREspaceGB
+requiredDataDriveSpaceGB=$(( numberofWininstalls * dataPartsizeGB + requiredSTOREspaceGB ))
+export requiredDataDriveSpaceGB
+if [ $requiredDataDriveSpaceGB -gt $TotalFreeinGBDataDrive ]; then echo "Nema dovoljno prostora na disku za zahtjeve"; echo "Potrebno je "$requiredDataDriveSpaceGB"GB prostora, no slobodno je samo "$TotalFreeinGBDataDrive"GB"; exit 1; fi
+
+echo "Data disk ima dovoljno prostora, preostalo je još "$(( TotalFreeInGBytesSysDrive - requiredDataDriveSpaceGB ))" GB prostora"
 echo "Pozivam skriptu pripreme diskova za više instalacija"
 #./02_MultiInstall.sh
 else
