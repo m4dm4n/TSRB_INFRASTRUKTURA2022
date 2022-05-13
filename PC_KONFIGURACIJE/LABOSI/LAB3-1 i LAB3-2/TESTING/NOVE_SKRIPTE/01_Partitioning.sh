@@ -23,6 +23,7 @@ unset numberOfWinInstalls
 unset winSystemPartSizeGB
 unset dataPartSizeGB
 linuxHomeNeeded=0
+saveDIR=~/BACKUP
 #########
 
 #########
@@ -123,6 +124,7 @@ TotalFreeinMBDataDrive=$(( TotalFreeinBDataDrive / 1024 / 1024 ))
 TotalFreeinGBDataDrive=$(( TotalFreeinMBDataDrive / 1024 ))
 
 # Export Variables
+export saveDIR
 export sysDrive
 export dataDrive
 export numberOfWinInstalls
@@ -173,7 +175,7 @@ if [ $requiredDataDriveSpaceGB -gt $TotalFreeinGBDataDrive ]; then echo "Nema do
 
 echo "Data disk ima dovoljno prostora, preostalo je još "$(( TotalFreeInGBytesSysDrive - requiredDataDriveSpaceGB ))" GB prostora"
 echo "Pozivam skriptu pripreme diskova za više instalacija"
-#./02_MultiInstall.sh
+./02_MultiInstall.sh
 else
 echo "Nešto je pošlo po krivu"
 exit 1

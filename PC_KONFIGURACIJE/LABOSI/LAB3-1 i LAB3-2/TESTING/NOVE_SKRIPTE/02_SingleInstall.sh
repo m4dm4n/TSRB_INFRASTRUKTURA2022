@@ -24,6 +24,13 @@ function pause(){
 
 #---------------------------
 
+# Create folders for backup
+echo "Stvaram direktorije za Backup GPT struktura"
+saveDIR=~/BACKUP
+mkdir -p $saveDIR/$sysDrive/SINGLE
+mkdir -p $saveDIR/$dataDrive/SINGLE
+
+
 # Calculate Windows System partition size
 winBackupPartinMB=30000
 winSystemPartinMB=$(( TotalFreeInMBytesSysDrive - winEfiPartinMB - msrPartinMB - winRecoveryPartinMB - winBackupPartinMB - 2 ))
@@ -75,19 +82,18 @@ pause
 # The resulting file is a binary file consisting of the protective MBR, the main GPT 
 # header, the backup GPT header, and one copy of the partition table, in that order. 
 echo "Stvaram direktorije za Backup GPT struktura"
-saveDIR=~/BACKUP
 mkdir -p $saveDIR/$sysDrive/SINGLE
 mkdir -p $saveDIR/$dataDrive/SINGLE
 
 echo "Spremam GPT sa svim particijama na diskovima"
-sgdisk --backup=$saveDIR/$sysDrive/SINGLE/00_SSD_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
-dd if=$saveDIR/$sysDrive/SINGLE/00_SSD_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/$sysDrive/SINGLE/01_SSD_protectiveMBR.gpt
-dd if=$saveDIR/$sysDrive/SINGLE/00_SSD_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/$sysDrive/SINGLE/02_SSD_primaryHEADER.gpt
-dd if=$saveDIR/$sysDrive/SINGLE/00_SSD_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/$sysDrive/SINGLE/03_SSD_backupHEADER.gpt
-dd if=$saveDIR/$sysDrive/SINGLE/00_SSD_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/$sysDrive/SINGLE/04_SSD_GPTPartitions.gpt
+sgdisk --backup=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/$sysDrive/SINGLE/01_SysDrive_protectiveMBR.gpt
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/$sysDrive/SINGLE/02_SysDrive_primaryHEADER.gpt
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/$sysDrive/SINGLE/03_SysDrive_backupHEADER.gpt
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/$sysDrive/SINGLE/04_SysDrive_GPTPartitions.gpt
 
-sgdisk --backup=$saveDIR/$dataDrive/SINGLE/00_HDD_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
-dd if=$saveDIR/$dataDrive/SINGLE/00_HDD_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/$dataDrive/SINGLE/01_HDD_protectiveMBR.gpt
-dd if=$saveDIR/$dataDrive/SINGLE/00_HDD_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/$dataDrive/SINGLE/02_HDD_primaryHEADER.gpt
-dd if=$saveDIR/$dataDrive/SINGLE/00_HDD_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/$dataDrive/SINGLE/03_HDD_backupHEADER.gpt
-dd if=$saveDIR/$dataDrive/SINGLE/00_HDD_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/$dataDrive/SINGLE/04_HDD_GPTPartitions.gpt
+sgdisk --backup=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/$dataDrive/SINGLE/01_DataDrive_protectiveMBR.gpt
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/$dataDrive/SINGLE/02_DataDrive_primaryHEADER.gpt
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/$dataDrive/SINGLE/03_DataDrive_backupHEADER.gpt
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/$dataDrive/SINGLE/04_DataDrive_GPTPartitions.gpt
