@@ -39,6 +39,10 @@ select yn in "Da" "Ne";do
      esac
 done
 
+partprobe
+sleep 2
+sync
+sleep 5
 
 #### CALLING SELECT_CONF SCRIPT
 

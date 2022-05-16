@@ -1,0 +1,478 @@
+[H[2J[3JPotrebno je stvoriti Linux Home Particije
+Provjera slobodnog prostora za sistemski disk...
+Sistemski disk ima dovoljno prostora, preostalo je još 1702 GB prostora
+Provjera slobodnog prostora za data disk...
+Data disk ima dovoljno prostora, preostalo je još 1852 GB prostora
+Pozivam skriptu pripreme diskova za više instalacija
+[H[2J[3JStvaram direktorije za Backup GPT struktura
+Gotovo
+Stvaram GPT strukturu na diskovima
+Gotovo
+Stvaram Linux Home particije
+Gotovo
+Stvaram Windows particije
+Gotovo
+Stvaram BACKUP particiju
+Gotovo
+[H[2J[3JStvaram  winSystem DATA particije
+1 prolaz
+Disk /dev/sda: 7795113984 sectors, 3.6 TiB
+Model: VMware Virtual S
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 8838B4FA-55D2-429D-B357-CCACB7B25292
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 7795113950
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 7774142397 sectors (3.6 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048        20973567   10.0 GiB    0700  DATA1
+2 prolaz
+Disk /dev/sda: 7795113984 sectors, 3.6 TiB
+Model: VMware Virtual S
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 8838B4FA-55D2-429D-B357-CCACB7B25292
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 7795113950
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 7753170877 sectors (3.6 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048        20973567   10.0 GiB    0700  DATA1
+   2        20973568        41945087   10.0 GiB    0700  DATA2
+3 prolaz
+Disk /dev/sda: 7795113984 sectors, 3.6 TiB
+Model: VMware Virtual S
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 8838B4FA-55D2-429D-B357-CCACB7B25292
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 7795113950
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 7732199357 sectors (3.6 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048        20973567   10.0 GiB    0700  DATA1
+   2        20973568        41945087   10.0 GiB    0700  DATA2
+   3        41945088        62916607   10.0 GiB    0700  DATA3
+Ispis GPT struktura
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 6076 sectors (3.0 MiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048         1024000   499.0 MiB   EF00  EFI System Partition
+   2         1026048        17803263   8.0 GiB     8200  swap
+   3        17803264       122660863   50.0 GiB    8304  root
+   4       122660864       143632383   10.0 GiB    8302  home
+   5       143632384       144656383   500.0 MiB   EF00  EFI System Partition
+   6       144656384       144918527   128.0 MiB   0C01  MS Reserved
+   7       144918528       165890047   10.0 GiB    0700  Windows11
+   8       165890048       186861567   10.0 GiB    2700  MS Recovery
+   9       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+  10       187885568       188147711   128.0 MiB   0C01  MS Reserved
+  11       188147712       209119231   10.0 GiB    0700  Windows11
+  12       209119232       230090751   10.0 GiB    2700  MS Recovery
+  13       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+  14       231114752       231376895   128.0 MiB   0C01  MS Reserved
+  15       231376896       252348415   10.0 GiB    0700  Windows11
+  16       252348416       273319935   10.0 GiB    2700  MS Recovery
+  17       273319936       274343935   500.0 MiB   EF00  EFI System Partition
+  18       274343936       274606079   128.0 MiB   0C01  MS Reserved
+  19       274606080      3865049087   1.7 TiB     0700  STORE
+  20      3865049088      3886020607   10.0 GiB    2700  MS Recovery
+Disk /dev/sda: 7795113984 sectors, 3.6 TiB
+Model: VMware Virtual S
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 8838B4FA-55D2-429D-B357-CCACB7B25292
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 7795113950
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 2014 sectors (1007.0 KiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048        20973567   10.0 GiB    0700  DATA1
+   2        20973568        41945087   10.0 GiB    0700  DATA2
+   3        41945088        62916607   10.0 GiB    0700  DATA3
+   4        62916608      7795113950   3.6 TiB     0700  STORE
+Stvaram datotecne sustave na particijama
+FAT32
+mkfs.fat 4.1 (2017-01-24)
+mkfs.fat 4.1 (2017-01-24)
+mkfs.fat 4.1 (2017-01-24)
+mkfs.fat 4.1 (2017-01-24)
+mkfs.fat 4.1 (2017-01-24)
+Linux SWAP
+ROOT EXT4
+HOME EXT4
+WIN NTFS
+REC NTFS
+Gotovo
+Spremam GPT sa svim particijama na diskovima
+Gotovo
+Spremam Backup Linux GPT strukture
+The operation has completed successfully.
+Gotovo
+Spremam Backup Store GPT strukture
+Gotovo
+Malo ciscenja...
+Ukupno ima 12 Particija
+Spremam Backup Windows GPT strukture
+Početak prolaza 1
+Tablica na početku prolaza
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3756335037 sectors (1.7 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       143632384       144656383   500.0 MiB   EF00  EFI System Partition
+   2       144656384       144918527   128.0 MiB   0C01  MS Reserved
+   3       144918528       165890047   10.0 GiB    0700  Windows11
+   4       165890048       186861567   10.0 GiB    2700  MS Recovery
+   5       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   6       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   7       188147712       209119231   10.0 GiB    0700  Windows11
+   8       209119232       230090751   10.0 GiB    2700  MS Recovery
+   9       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+  10       231114752       231376895   128.0 MiB   0C01  MS Reserved
+  11       231376896       252348415   10.0 GiB    0700  Windows11
+  12       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon obrisanih particija, od 5.
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       143632384       144656383   500.0 MiB   EF00  EFI System Partition
+   2       144656384       144918527   128.0 MiB   0C01  MS Reserved
+   3       144918528       165890047   10.0 GiB    0700  Windows11
+   4       165890048       186861567   10.0 GiB    2700  MS Recovery
+
+Tablica nakon učitanog BACKUP Cleaned particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3756335037 sectors (1.7 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       143632384       144656383   500.0 MiB   EF00  EFI System Partition
+   2       144656384       144918527   128.0 MiB   0C01  MS Reserved
+   3       144918528       165890047   10.0 GiB    0700  Windows11
+   4       165890048       186861567   10.0 GiB    2700  MS Recovery
+   5       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   6       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   7       188147712       209119231   10.0 GiB    0700  Windows11
+   8       209119232       230090751   10.0 GiB    2700  MS Recovery
+   9       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+  10       231114752       231376895   128.0 MiB   0C01  MS Reserved
+  11       231376896       252348415   10.0 GiB    0700  Windows11
+  12       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon izmjene mjesta particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3756335037 sectors (1.7 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   2       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   3       188147712       209119231   10.0 GiB    0700  Windows11
+   4       209119232       230090751   10.0 GiB    2700  MS Recovery
+   5       143632384       144656383   500.0 MiB   EF00  EFI System Partition
+   6       144656384       144918527   128.0 MiB   0C01  MS Reserved
+   7       144918528       165890047   10.0 GiB    0700  Windows11
+   8       165890048       186861567   10.0 GiB    2700  MS Recovery
+   9       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+  10       231114752       231376895   128.0 MiB   0C01  MS Reserved
+  11       231376896       252348415   10.0 GiB    0700  Windows11
+  12       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon brisanja 5-8 particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3799564221 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   2       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   3       188147712       209119231   10.0 GiB    0700  Windows11
+   4       209119232       230090751   10.0 GiB    2700  MS Recovery
+   9       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+  10       231114752       231376895   128.0 MiB   0C01  MS Reserved
+  11       231376896       252348415   10.0 GiB    0700  Windows11
+  12       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon sortiranja
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3799564221 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   2       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   3       188147712       209119231   10.0 GiB    0700  Windows11
+   4       209119232       230090751   10.0 GiB    2700  MS Recovery
+   5       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   6       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   7       231376896       252348415   10.0 GiB    0700  Windows11
+   8       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Ukupan broj SysDrive particija: 8
+Kraj prolaza 1
+Početak prolaza 2
+Tablica na početku prolaza
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3799564221 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   2       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   3       188147712       209119231   10.0 GiB    0700  Windows11
+   4       209119232       230090751   10.0 GiB    2700  MS Recovery
+   5       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   6       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   7       231376896       252348415   10.0 GiB    0700  Windows11
+   8       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon obrisanih particija, od 5.
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   2       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   3       188147712       209119231   10.0 GiB    0700  Windows11
+   4       209119232       230090751   10.0 GiB    2700  MS Recovery
+
+Tablica nakon učitanog BACKUP Cleaned particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3799564221 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   2       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   3       188147712       209119231   10.0 GiB    0700  Windows11
+   4       209119232       230090751   10.0 GiB    2700  MS Recovery
+   5       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   6       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   7       231376896       252348415   10.0 GiB    0700  Windows11
+   8       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon izmjene mjesta particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3799564221 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   2       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   3       231376896       252348415   10.0 GiB    0700  Windows11
+   4       252348416       273319935   10.0 GiB    2700  MS Recovery
+   5       186861568       187885567   500.0 MiB   EF00  EFI System Partition
+   6       187885568       188147711   128.0 MiB   0C01  MS Reserved
+   7       188147712       209119231   10.0 GiB    0700  Windows11
+   8       209119232       230090751   10.0 GiB    2700  MS Recovery
+
+Tablica nakon brisanja 5-8 particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   2       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   3       231376896       252348415   10.0 GiB    0700  Windows11
+   4       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon sortiranja
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   2       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   3       231376896       252348415   10.0 GiB    0700  Windows11
+   4       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Ukupan broj SysDrive particija: 4
+Kraj prolaza 2
+Početak prolaza 3
+Tablica na početku prolaza
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   2       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   3       231376896       252348415   10.0 GiB    0700  Windows11
+   4       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon obrisanih particija, od 5.
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   2       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   3       231376896       252348415   10.0 GiB    0700  Windows11
+   4       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon učitanog BACKUP Cleaned particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   2       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   3       231376896       252348415   10.0 GiB    0700  Windows11
+   4       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon izmjene mjesta particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3842793405 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   5       230090752       231114751   500.0 MiB   EF00  EFI System Partition
+   6       231114752       231376895   128.0 MiB   0C01  MS Reserved
+   7       231376896       252348415   10.0 GiB    0700  Windows11
+   8       252348416       273319935   10.0 GiB    2700  MS Recovery
+
+Tablica nakon brisanja 5-8 particija
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3886022589 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+
+Tablica nakon sortiranja
+Disk /dev/nvme0n1: 3886022656 sectors, 1.8 TiB
+Model: VMware Virtual NVMe Disk
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 5AD10135-7763-486D-AABD-6BE405C9D824
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3886022622
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3886022589 sectors (1.8 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+
