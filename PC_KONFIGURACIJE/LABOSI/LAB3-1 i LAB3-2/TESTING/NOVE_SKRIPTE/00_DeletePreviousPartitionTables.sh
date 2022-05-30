@@ -39,8 +39,9 @@ select yn in "Da" "Ne";do
      esac
 done
 
+sleep 5
 partprobe
-sleep 2
+sleep 5
 sync
 sleep 5
 

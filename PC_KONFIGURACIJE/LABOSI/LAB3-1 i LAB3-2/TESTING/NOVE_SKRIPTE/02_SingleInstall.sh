@@ -87,13 +87,13 @@ mkdir -p $saveDIR/$dataDrive/SINGLE
 
 echo "Spremam GPT sa svim particijama na diskovima"
 sgdisk --backup=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
-dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/$sysDrive/SINGLE/01_SysDrive_protectiveMBR.gpt
-dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/$sysDrive/SINGLE/02_SysDrive_primaryHEADER.gpt
-dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/$sysDrive/SINGLE/03_SysDrive_backupHEADER.gpt
-dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/$sysDrive/SINGLE/04_SysDrive_GPTPartitions.gpt
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/SINGLE/01_SysDrive_protectiveMBR.gpt bs=512 count=1 status=none
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/SINGLE/02_SysDrive_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/SINGLE/03_SysDrive_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+dd if=$saveDIR/$sysDrive/SINGLE/00_SysDrive_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/SINGLE/04_SysDrive_GPTPartitions.gpt bs=512 skip=3 status=none
 
 sgdisk --backup=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
-dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/$dataDrive/SINGLE/01_DataDrive_protectiveMBR.gpt
-dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/$dataDrive/SINGLE/02_DataDrive_primaryHEADER.gpt
-dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/$dataDrive/SINGLE/03_DataDrive_backupHEADER.gpt
-dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/$dataDrive/SINGLE/04_DataDrive_GPTPartitions.gpt
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/SINGLE/01_DataDrive_protectiveMBR.gpt bs=512 count=1 status=none
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/SINGLE/02_DataDrive_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/SINGLE/03_DataDrive_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+dd if=$saveDIR/$dataDrive/SINGLE/00_DataDrive_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/SINGLE/04_DataDrive_GPTPartitions.gpt status=none

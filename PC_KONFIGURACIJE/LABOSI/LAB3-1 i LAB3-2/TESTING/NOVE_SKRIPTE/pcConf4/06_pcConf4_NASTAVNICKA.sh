@@ -1,104 +1,118 @@
 #!/bin/bash
 
+clear
+##########
+# Set some options
+set -o errexit # It will exit on first error in script
+set -o pipefail # It will exit on first error in some pipeline
+##########
 
+##########
+# Provjera je li skripta pokrenuta sa root ovlastima
+if [ "$EUID" -ne 0 ]
+  then echo "Pokrenuti skriptu sa root ovlastima (sudo ./naziv_skripte.sh)"
+  exit 1
+fi
+#########
 
-# Define some variables here
-#---------------------------
-
-nvmeSizeinB=$(fdisk -l | grep nvme | cut -d " " -f5)
-nvmeSizeinMB=$(($nvmeSizeinB/1024/1024))
-nvmeSizeinGB=$(($nvmeSizeinB/1024/1024/1024))
-hddSizeinB=$(fdisk -l | grep sda | cut -d " " -f5)
-hddSizeinMB=$(($hddSizeinB/1024/1024))
-hddSizeinGB=$(($hddSizeinB/1024/1024/1024))
-
-
-
-linEfiPartinMB=300
-linSwapinGB=16
-linRootinMB=50
-linHomeinMB=30
-
+#########
+# Predefinirane veličine particija
+# Linux particije
+linEfiPartinMB=500
+linSwapinGB=8
+linRootinGB=50
+linHomeinGB=10
+# Windows particije
 winEfiPartinMB=500
 msrPartinMB=128
 winRecoveryPartinMB=10240
-winRecoveryPartinGB=$(($winRecoveryPartinMB/1024))
+winRecoveryPartinGB=$(( winRecoveryPartinMB / 1024 ))
 
-#---------------------------
+
+#########
+# Definiranje pause funkcije
+function pause(){
+ read -s -n 1 -p "Pritisni bilo koju tipku za nastavak . . ."
+ echo ""
+}
+#########
+
 
 # Define SSD and HDD
 #---------------------------
 sudo fdisk -l | grep -E '(Disk /dev/sd|Disk /dev/nvme)'
 
-read -n 7 -p $'Select SSD: \n' ssdVar
+read -n 3 -p $'Select System Drive(for OS): \n' sysDrive
 echo -e "\n"
-read -n 3 -p $'Select HDD: \n' hddVar
+read -n 7 -p $'Select Data Drive(for VMs): \n' dataDrive
 echo -e "\n"
 
-#---------------------------
+TotalSizeinBSysDrive=$(fdisk -l | grep sda | cut -d " " -f5)
+TotalSizeinMBSysDrive=$(( TotalSizeinBSysDrive / 1024 / 1024 ))
+TotalSizeinGBSysDrive=$(( TotalSizeinBSysDrive / 1024 / 1024 / 1024 ))
 
-# Define some functions here
-#---------------------------
-function pause(){
- read -s -n 1 -p "Press any key to continue . . ."
- echo ""
-}
-
-#---------------------------
-
-# KABINETI PARTITIONING
+TotalSizeinBDataDrive=$(fdisk -l | grep nvme | cut -d " " -f5)
+TotalSizeinMBDataDrive=$(( TotalSizeinBDataDrive / 1024 / 1024 ))
+TotalSizeinGBDataDrive=$(( TotalSizeinBDataDrive / 1024 / 1024 / 1024 ))
 
 # Calculate Windows System partition size
 
-winBackupPartinMB=30000
-winSystemPartinMB=$(($nvmeSizeinMB-$winEfiPartinMB-$msrPartinMB-$winRecoveryPartinMB-$winBackupPartinMB-2))
-echo "Windows System Partition size is: " $winSystemPartinMB "MB"
-echo -e "\n"
-winDataPartinMB=$(($hddSizeinMB-2))
+winBackupPartinMB=50000
+winSystemPartinMB=$(($TotalSizeinMBSysDrive-$winEfiPartinMB-$msrPartinMB-$winRecoveryPartinMB-$winBackupPartinMB-2))
+echo "Windows System Partition size is: " $(( $winSystemPartinMB / 1024 )) "GB"
+echo
+echo
+winDataPartinMB=$(($TotalSizeinMBDataDrive-2))
 
-sgdisk  --mbrtogpt /dev/$ssdVar
-sgdisk --pretend --mbrtogpt /dev/$hddVar 
+echo Korak1
+sgdisk --mbrtogpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --mbrtogpt /dev/$sysDrive >/dev/null 2>&1
 
-sgdisk -n 1:0:+"$winEfiPartinMB"MiB -t 0:ef00 -c 0:"EFI System Partition" /dev/$ssdVar
-sgdisk -n 2:0:+"$msrPartinMB"MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/$ssdVar
-sgdisk -n 3:0:+"$winSystemPartinMB"MiB -t 0:0700 -c 0:"Windows11"  /dev/$ssdVar
-sgdisk -n 4:0:+"$winRecoveryPartinMB"MiB -t 0:2700 -c 0:"MS Recovery"  /dev/$ssdVar
-sgdisk -n 5:0:+"$winBackupPartinMB"MiB -t 0:0700 -c 0:"BACKUP"  /dev/$ssdVar
+echo Korak2
+sgdisk -n 1:0:+"$winEfiPartinMB"MiB -t 0:ef00 -c 0:"EFI System Partition" /dev/$sysDrive >/dev/null 2>&1
+sgdisk -n 2:0:+"$msrPartinMB"MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/$sysDrive >/dev/null 2>&1
+sgdisk -n 3:0:+"$winSystemPartinMB"MiB -t 0:0700 -c 0:"Windows11"  /dev/$sysDrive >/dev/null 2>&1
+sgdisk -n 4:0:+"$winRecoveryPartinMB"MiB -t 0:2700 -c 0:"MS Recovery"  /dev/$sysDrive >/dev/null 2>&1
+sgdisk -n 5:0:+"$winBackupPartinMB"MiB -t 0:0700 -c 0:"BACKUP"  /dev/$sysDrive >/dev/null 2>&1
 
-sgdisk -n 1:0:+"$winDataPartinMB"MiB -t 0:0700 -c 0:"DATA" /dev/$hddVar
+echo Korak3
+sgdisk -n 1:0:+"$winDataPartinMB"MiB -t 0:0700 -c 0:"DATA" /dev/$dataDrive >/dev/null 2>&1
 
-sgdisk -p /dev/$ssdVar
-sgdisk -p /dev/$hddVar
+sgdisk -p /dev/$sysDrive
+sgdisk -p /dev/$dataDrive
 pause
 
-
+echo Korak4
 # Create filesystems
-mkfs.vfat -F 32 /dev/"$ssdVar""p1" >/dev/null 2>&1
-mkfs.ntfs -Q /dev/"$ssdVar""p3" >/dev/null 2>&1
-mkfs.ntfs -Q /dev/"$ssdVar""p4" >/dev/null 2>&1
-mkfs.ntfs -Q /dev/"$ssdVar""p5" >/dev/null 2>&1
+mkfs.vfat -F 32 /dev/"$sysDrive""1" >/dev/null 2>&1
+mkfs.ntfs -Q /dev/"$sysDrive""3" >/dev/null 2>&1
+mkfs.ntfs -Q /dev/"$sysDrive""4" >/dev/null 2>&1
+mkfs.ntfs -Q /dev/"$sysDrive""5" >/dev/null 2>&1
 
-mkfs.ntfs -Q /dev/"$hddVar""1" >/dev/null 2>&1
+mkfs.ntfs -Q /dev/"$dataDrive""p1" >/dev/null 2>&1
 
 
-
+echo Korak5
 # BACKUP GPT TABLES
 # The resulting file is a binary file consisting of the protective MBR, the main GPT 
 # header, the backup GPT header, and one copy of the partition table, in that order. 
 echo "Stvaram direktorije za Backup GPT struktura"
 saveDIR=~/BACKUP
-mkdir -p $saveDIR/SSD/CONF4/NASTAVNICKA
-mkdir -p $saveDIR/HDD/CONF4/NASTAVNICKA
+
+mkdir -p $saveDIR/$sysDrive/CONF4/NASTAVNICKA
+mkdir -p $saveDIR/$dataDrive/CONF4/NASTAVNICKA
 
 echo "Spremam GPT sa svim particijama na diskovima"
-sgdisk --backup=$saveDIR/SSD/CONF4/KABINETI/00_SSD_ALLPARTITIONS.gpt /dev/"$ssdVar" >/dev/null 2>&1
-dd if=$saveDIR/SSD/CONF4/NASTAVNICKA/00_SSD_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/SSD/CONF4/NASTAVNICKA/01_SSD_protectiveMBR.gpt
-dd if=$saveDIR/SSD/CONF4/NASTAVNICKA/00_SSD_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/SSD/CONF4/NASTAVNICKA/02_SSD_primaryHEADER.gpt
-dd if=$saveDIR/SSD/CONF4/NASTAVNICKA/00_SSD_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/SSD/CONF4/NASTAVNICKA/03_SSD_backupHEADER.gpt
-dd if=$saveDIR/SSD/CONF4/NASTAVNICKA/00_SSD_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/SSD/CONF4/NASTAVNICKA/04_SSD_GPTPartitions.gpt
 
-sgdisk --backup=$saveDIR/HDD/CONF4/NASTAVNICKA/00_HDD_ALLPARTITIONS.gpt /dev/"$hddVar" >/dev/null 2>&1
-dd if=$saveDIR/HDD/CONF4/NASTAVNICKA/00_HDD_ALLPARTITIONS.gpt bs=512 count=1 > $saveDIR/HDD/CONF4/NASTAVNICKA/01_HDD_protectiveMBR.gpt
-dd if=$saveDIR/HDD/CONF4/NASTAVNICKA/00_HDD_ALLPARTITIONS.gpt bs=512 skip=1 count=1 > $saveDIR/HDD/CONF4/NASTAVNICKA/02_HDD_primaryHEADER.gpt
-dd if=$saveDIR/HDD/CONF4/NASTAVNICKA/00_HDD_ALLPARTITIONS.gpt bs=512 skip=2 count=1 > $saveDIR/HDD/CONF4/NASTAVNICKA/03_HDD_backupHEADER.gpt
-dd if=$saveDIR/HDD/CONF4/NASTAVNICKA/00_HDD_ALLPARTITIONS.gpt bs=512 skip=3 > $saveDIR/HDD/CONF4/NASTAVNICKA/04_HDD_GPTPartitions.gpt
+
+sgdisk --backup=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/00_"$sysDrive"_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+dd if=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/00_"$sysDrive"_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/01_"$sysDrive"_protectiveMBR.gpt bs=512 count=1 status=none
+dd if=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/00_"$sysDrive"_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/02_"$sysDrive"_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+dd if=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/00_"$sysDrive"_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/03_"$sysDrive"_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+dd if=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/00_"$sysDrive"_ALLPARTITIONS.gpt of=$saveDIR/$sysDrive/CONF4/NASTAVNICKA/04_"$sysDrive"_GPTPartitions.gpt status=none
+
+sgdisk --backup=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/00_"$dataDrive"_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
+dd if=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/00_"$dataDrive"_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/01_"$dataDrive"_protectiveMBR.gpt bs=512 count=1 status=none
+dd if=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/00_"$dataDrive"_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/02_"$dataDrive"_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+dd if=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/00_"$dataDrive"_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/03_"$dataDrive"_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+dd if=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/00_"$dataDrive"_ALLPARTITIONS.gpt of=$saveDIR/$dataDrive/CONF4/NASTAVNICKA/04_"$dataDrive"_GPTPartitions.gpt bs=512 skip=3 status=none
