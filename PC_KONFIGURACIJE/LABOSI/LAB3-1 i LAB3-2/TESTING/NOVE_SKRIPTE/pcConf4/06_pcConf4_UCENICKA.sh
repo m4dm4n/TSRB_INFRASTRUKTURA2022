@@ -39,10 +39,16 @@ function pause(){
 
 #########
 # Definiranje funkcije za provjeru broja particija
-function partnumbercheck(){
+function syspartnumbercheck(){
   partprobe >/dev/null 2>&1
   sleep 2
   totalSysDrivePartitions=$(grep -c "$sysDrive"[0-9] /proc/partitions)
+}
+
+function datapartnumbercheck(){
+  partprobe >/dev/null 2>&1
+  sleep 2
+  totalDataDrivePartitions=$(grep -c "$dataDrive"[0-9] /proc/partitions)
 }
 
 # Define SSD and HDD
@@ -65,7 +71,6 @@ TotalSizeinGBDataDrive=$(( TotalSizeinBDataDrive / 1024 / 1024 / 1024 ))
 # Create folders
 echo "Stvaram direktorije za Backup GPT struktura"
 saveDIR=~/BACKUP
-mkdir -p $saveDIR/$dataDrive
 # Folders for Linux GPT backups
 mkdir -p $saveDIR/$sysDrive/Linux{1,2}
 # Folders for Windows GEN* backups
@@ -76,6 +81,8 @@ mkdir -p $saveDIR/$sysDrive/Windows10_RAZNO
 mkdir -p $saveDIR/$sysDrive/Windows10_SEM{1,2}
 # Folders for Windows STORE backup - Only STORE
 mkdir $saveDIR/$sysDrive/Windows10_STORE
+# Folders for Windows STORE Linux* backups
+mkdir -p $saveDIR/$sysDrive/Windows10_STORE_Linux{1..2}
 # Folders for Windows STORE GEN* backups
 mkdir -p $saveDIR/$sysDrive/Windows10_STORE_GEN{1..5}
 # Folders for Windows STORE RAZNO backups
@@ -84,6 +91,18 @@ mkdir -p $saveDIR/$sysDrive/Windows10_STORE_RAZNO
 mkdir -p $saveDIR/$sysDrive/Windows10_STORE_SEM{1,2}
 # Folders for Windows STORE TEMP backups
 mkdir $saveDIR/$sysDrive/Windows10_STORE_TEMP
+# Folders for Linux DATA drive backups
+mkdir -p $saveDIR/$dataDrive/Linux{1,2}
+# Folders for Windows GEN* DATA drive backups
+mkdir -p $saveDIR/$dataDrive/Windows10_GEN{1..5}
+# Folders for Windows RAZNO DATA drive backups
+mkdir -p $saveDIR/$dataDrive/Windows10_RAZNO
+# Folders for Windows SEM* DATA drive backups
+mkdir -p $saveDIR/$dataDrive/Windows10_SEM{1,2}
+# Folders for Windows STORE DATA drive backup - Only STORE
+mkdir $saveDIR/$dataDrive/Windows10_STORE
+
+
 echo "Gotovo"
 
 
@@ -230,7 +249,7 @@ totalDataDrivePartitions=$(grep -c "$dataDrive""p"[0-9] /proc/partitions)
 echo Korak8
 # BACKUP ONLY LINUX1 GPT
 echo "Spremam Backup Linux1 GPT strukture"
-partnumbercheck
+syspartnumbercheck
 for (( i=5; i<=totalSysDrivePartitions; i++ ))
 do
  sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
@@ -247,7 +266,7 @@ echo "Gotovo"
 echo Korak9
 # BACKUP ONLY LINUX2 GPT
 echo "Spremam Backup Linux2 GPT strukture"
-partnumbercheck
+syspartnumbercheck
 for (( i=9; i<=totalSysDrivePartitions; i++ ))
 do
  sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
@@ -269,7 +288,7 @@ echo "Gotovo"
 echo Korak10
 # Saving Windows STORE partitions
 echo "Spremam Backup Store GPT strukture"
-partnumbercheck
+syspartnumbercheck
 for (( i=1; i<=$((totalSysDrivePartitions-5)); i++ ))
 do
 	 sgdisk -d "$i" /dev/"$sysDrive" >/dev/null 2>&1
@@ -281,6 +300,7 @@ dd if=$saveDIR/$sysDrive/Windows10_STORE/00_SysDrive_Windows10_STORE.gpt of=$sav
 dd if=$saveDIR/$sysDrive/Windows10_STORE/00_SysDrive_Windows10_STORE.gpt of=$saveDIR/$sysDrive/Windows10_STORE/04_SysDrive_Windows10_STORE_backupHEADER.gpt bs=512 skip=2 count=1 status=none
 dd if=$saveDIR/$sysDrive/Windows10_STORE/00_SysDrive_Windows10_STORE.gpt of=$saveDIR/$sysDrive/Windows10_STORE/03_SysDrive_Windows10_STORE_GPTPartitions.gpt bs=512 skip=3 status=none
 sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
 echo "Gotovo"
 
 
@@ -288,13 +308,14 @@ echo Korak11
 # Saving Windows GEN1-5 Partitions
 echo "Malo čišćenja"
 echo "Brisanje Linux particija"
+
 for (( i=1; i<=8; i++ ))
 do
  sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
 done
 
 sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
-partnumbercheck
+syspartnumbercheck
 echo "Brisanje svega nakon GENx particija"
 for (( i=26; i<=totalSysDrivePartitions; i++ ))
 do
@@ -304,7 +325,7 @@ echo "Čišćenje gotovo"
 
 echo "Spremam Backup GEN1-5 GPT strukture"
 sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_1.gpt /dev/"$sysDrive" >/dev/null 2>&1
-partnumbercheck
+syspartnumbercheck
 
 for (( i=1; i<=5; i++ ))
     do
@@ -337,7 +358,7 @@ for (( i=1; i<=5; i++ ))
     var=$(( i + 1 ))
     sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_$var.gpt /dev/"$sysDrive" >/dev/null 2>&1
 
-    partnumbercheck
+    syspartnumbercheck
     #echo "Ukupan broj SysDrive particija: "$totalSysDrivePartitions
 
 if [ $var -eq 5 ]; then
@@ -351,6 +372,7 @@ fi
 
 done
 sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
 echo "Gotovo"
 
 
@@ -358,7 +380,7 @@ echo "Gotovo"
 echo Korak12
 # Saving Windows RAZNO Partition
 echo "Spremam Backup RAZNO GPT strukture"
-partnumbercheck
+syspartnumbercheck
 
 echo "Malo čišćenja"
 echo "Brisanje Svega prije RAZNO particija"
@@ -368,7 +390,7 @@ do
 done
 
 sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
-partnumbercheck
+syspartnumbercheck
 echo "Brisanje svega nakon RAZNO particija"
 for (( i=6; i<=totalSysDrivePartitions; i++ ))
 do
@@ -383,8 +405,8 @@ echo "Spremam Backup RAZNO GPT strukture"
     dd if=$saveDIR/$sysDrive/Windows10_RAZNO/00_SysDrive_Windows10_RAZNO.gpt of=$saveDIR/$sysDrive/Windows10_RAZNO/03_SysDrive_Windows10_RAZNO_GPTPartitions.gpt bs=512 skip=3 status=none
 
 sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
 echo "Gotovo"
-partnumbercheck
 
 
 
@@ -402,7 +424,7 @@ do
 done
 
 sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
-partnumbercheck
+syspartnumbercheck
 echo "Brisanje svega nakon SEM1-2 particija"
 
 for (( i=11; i<=totalSysDrivePartitions; i++ ))
@@ -414,7 +436,7 @@ echo "Čišćenje gotovo"
 
 echo "Spremam Backup SEM1-2 GPT strukture"
 sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_1.gpt /dev/"$sysDrive" >/dev/null 2>&1
-partnumbercheck
+syspartnumbercheck
 
 for (( i=1; i<=2; i++ ))
     do
@@ -447,7 +469,7 @@ for (( i=1; i<=2; i++ ))
     var=$(( i + 1 ))
     sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_$var.gpt /dev/"$sysDrive" >/dev/null 2>&1
 
-    partnumbercheck
+    syspartnumbercheck
     #echo "Ukupan broj SysDrive particija: "$totalSysDrivePartitions
 
 if [ $var -eq 2 ]; then
@@ -461,12 +483,13 @@ fi
 
 done
 sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
 echo "Gotovo"
 
 echo Korak14
 # Saving STORE+Linux1 Partitions
 echo "Spremam Backup STORE+Linux1 GPT strukture"
-partnumbercheck
+syspartnumbercheck
 echo "Malo čišćenja"
 echo "Brisanje Svega između Linux1 i STORE particija"
 for (( i=5; i<=$((totalSysDrivePartitions-5)); i++ ))
@@ -475,17 +498,33 @@ do
 done
 
 sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
-partnumbercheck
+syspartnumbercheck
 echo "Čišćenje gotovo"
 
+# Need to be done manually, partition numbers not equal
+sgdisk -r 1:5 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 2:6 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 3:7 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 4:8 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 8:9 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 7:8 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 6:7 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 5:6 /dev/"$sysDrive" >/dev/null 2>&1
 
+sgdisk --backup=$saveDIR/$sysDrive/Windows10_STORE_Linux1/00_SysDrive_Windows10_STORE_Linux1.gpt /dev/"$sysDrive" >/dev/null 2>&1
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux1/00_SysDrive_Windows10_STORE_Linux1.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux1/01_SysDrive_Windows10_STORE_Linux1_protectiveMBR.gpt bs=512 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux1/00_SysDrive_Windows10_STORE_Linux1.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux1/02_SysDrive_Windows10_STORE_Linux1_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux1/00_SysDrive_Windows10_STORE_Linux1.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux1/04_SysDrive_Windows10_STORE_Linux1_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux1/00_SysDrive_Windows10_STORE_Linux1.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux1/03_SysDrive_Windows10_STORE_Linux1_GPTPartitions.gpt bs=512 skip=3 status=none
 
-<<'###BLOCK-COMMENT'
+sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+echo "Gotovo"
+
 
 echo Korak15
 # Saving STORE+Linux2 Partition
 echo "Spremam Backup STORE+Linux2 GPT strukture"
-partnumbercheck
+syspartnumbercheck
 
 echo "Malo čišćenja"
 echo "Brisanje Svega prije Linux2 particija"
@@ -495,7 +534,7 @@ do
 done
 
 sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
-partnumbercheck
+syspartnumbercheck
 echo "Brisanje svega između Linux2 i STORE particija"
 
 for (( i=5; i<=$((totalSysDrivePartitions-5)); i++ ))
@@ -504,22 +543,291 @@ do
 done
 echo "Čišćenje gotovo"
 
+# Need to be done manually, partition numbers not equal
+sgdisk -r 1:5 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 2:6 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 3:7 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 4:8 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 8:9 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 7:8 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 6:7 /dev/"$sysDrive" >/dev/null 2>&1
+sgdisk -r 5:6 /dev/"$sysDrive" >/dev/null 2>&1
+
+sgdisk --backup=$saveDIR/$sysDrive/Windows10_STORE_Linux2/00_SysDrive_Windows10_STORE_Linux2.gpt /dev/"$sysDrive" >/dev/null 2>&1
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux2/00_SysDrive_Windows10_STORE_Linux2.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux2/01_SysDrive_Windows10_STORE_Linux2_protectiveMBR.gpt bs=512 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux2/00_SysDrive_Windows10_STORE_Linux2.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux2/02_SysDrive_Windows10_STORE_Linux2_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux2/00_SysDrive_Windows10_STORE_Linux2.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux2/04_SysDrive_Windows10_STORE_Linux2_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_Linux2/00_SysDrive_Windows10_STORE_Linux2.gpt of=$saveDIR/$sysDrive/Windows10_STORE_Linux2/03_SysDrive_Windows10_STORE_Linux2_GPTPartitions.gpt bs=512 skip=3 status=none
+
+sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+echo "Gotovo"
+
 
 echo Korak16
 # Saving STORE+ GEN1-5 Partitions
 echo "Spremam STORE+GEN1-5 GPT strukture"
-partnumbercheck
+syspartnumbercheck
+
+echo "Malo čišćenja"
+echo "Brisanje Svega prije GENx particija"
+for (( i=1; i<=8; i++ ))
+do
+ sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
+done
+
+sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+echo "Brisanje svega između GENx i STORE particija"
+
+for (( i=26; i<=$((totalSysDrivePartitions-5)); i++ ))
+do
+ sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
+done
+echo "Čišćenje gotovo"
+
+echo "Spremam Backup STORE GEN1-5 GPT strukture"
+sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_1.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+
+for (( i=1; i<=5; i++ ))
+    do
+      sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_"$i".gpt /dev/"$sysDrive" >/dev/null 2>&1
+      for (( j=6; j<=$((totalSysDrivePartitions-5)); j++ ))
+        do
+          sgdisk -d "$j" /dev/"$sysDrive" >/dev/null 2>&1
+        done
+  
+    for (( k=1; k<=5; k++ ))
+       do
+         sgdisk -r "$k":$((k+5)) /dev/"$sysDrive" >/dev/null 2>&1
+       done
+ 
+    sgdisk --backup=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/00_SysDrive_Windows10_STORE_GEN"$i".gpt /dev/"$sysDrive" >/dev/null 2>&1
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/00_SysDrive_Windows10_STORE_GEN"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/01_SysDrive_Windows10_STORE_GEN"$i"_protectiveMBR.gpt bs=512 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/00_SysDrive_Windows10_STORE_GEN"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/02_SysDrive_Windows10_STORE_GEN"$i"_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/00_SysDrive_Windows10_STORE_GEN"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/04_SysDrive_Windows10_STORE_GEN"$i"_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/00_SysDrive_Windows10_STORE_GEN"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$i"/03_SysDrive_Windows10_STORE_GEN"$i"_GPTPartitions.gpt bs=512 skip=3 status=none
+
+    sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_"$i".gpt /dev/"$sysDrive" >/dev/null 2>&1
+
+
+for (( k=1; k<=5; k++ ))
+       do
+         sgdisk -r "$k":$((k+5)) /dev/"$sysDrive" >/dev/null 2>&1
+       done
+ 
+    
+    for (( n=6; n<=10; n++))
+       do
+         sgdisk -d "$n" /dev/"$sysDrive" >/dev/null 2>&1
+       done
+ 
+    sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
+
+    var=$(( i + 1 ))
+    sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_$var.gpt /dev/"$sysDrive" >/dev/null 2>&1
+
+    syspartnumbercheck
+    
+
+
+if [ $var -eq 5 ]; then
+    for (( k=1; k<=5; k++ ))
+       do
+         sgdisk -r "$k":$((k+5)) /dev/"$sysDrive" >/dev/null 2>&1
+       done
+    sgdisk --backup=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/00_SysDrive_Windows10_STORE_GEN"$var".gpt /dev/"$sysDrive" >/dev/null 2>&1
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/00_SysDrive_Windows10_STORE_GEN"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/01_SysDrive_Windows10_STORE_GEN"$var"_protectiveMBR.gpt bs=512 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/00_SysDrive_Windows10_STORE_GEN"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/02_SysDrive_Windows10_STORE_GEN"$var"_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/00_SysDrive_Windows10_STORE_GEN"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/04_SysDrive_Windows10_STORE_GEN"$var"_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/00_SysDrive_Windows10_STORE_GEN"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_GEN"$var"/03_SysDrive_Windows10_STORE_GEN"$var"_GPTPartitions.gpt bs=512 skip=3 status=none
+  break 
+fi
+
+done
+sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+echo "Gotovo"
+
+
 
 echo Korak17
 # Saving STORE + RAZNO Partitions
 echo "Spremam STORE+RAZNO GPT strukture"
-partnumbercheck
+syspartnumbercheck
+
+echo "Malo čišćenja"
+echo "Brisanje Svega prije RAZNO particija"
+for (( i=1; i<=33; i++ ))
+do
+ sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
+done
+
+sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+echo "Brisanje svega između RAZNO i STORE particija"
+
+for (( i=6; i<=$((totalSysDrivePartitions-5)); i++ ))
+do
+ sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
+done
+echo "Čišćenje gotovo"
+
+    for (( k=1; k<=5; k++ ))
+       do
+         sgdisk -r "$k":$((k+5)) /dev/"$sysDrive" >/dev/null 2>&1
+       done
+ 
+    sgdisk --backup=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/00_SysDrive_Windows10_STORE_RAZNO.gpt /dev/"$sysDrive" >/dev/null 2>&1
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/00_SysDrive_Windows10_STORE_RAZNO.gpt of=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/01_SysDrive_Windows10_STORE_RAZNO_protectiveMBR.gpt bs=512 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/00_SysDrive_Windows10_STORE_RAZNO.gpt of=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/02_SysDrive_Windows10_STORE_RAZNO_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/00_SysDrive_Windows10_STORE_RAZNO.gpt of=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/04_SysDrive_Windows10_STORE_RAZNO_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/00_SysDrive_Windows10_STORE_RAZNO.gpt of=$saveDIR/$sysDrive/Windows10_STORE_RAZNO/03_SysDrive_Windows10_STORE_RAZNO_GPTPartitions.gpt bs=512 skip=3 status=none
+
+sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+echo "Gotovo"
+
+
+
 
 echo Korak18
 # Saving STORE + SEM1-2 Partitions
 echo "Spremam Backup STORE+SEM1-2 GPT strukture"
-partnumbercheck
+syspartnumbercheck
+
+echo "Malo čišćenja"
+echo "Brisanje Svega prije SEM1-2 particija"
+for (( i=1; i<=38; i++ ))
+do
+ sgdisk --delete="$i" /dev/"$sysDrive" >/dev/null 2>&1
+done
+
+sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+echo "Čišćenje gotovo"
+
+sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_1.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+
+for (( i=1; i<=2; i++ ))
+    do
+      sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_"$i".gpt /dev/"$sysDrive" >/dev/null 2>&1
+      for (( j=6; j<=$((totalSysDrivePartitions-5)); j++ ))
+        do
+          sgdisk -d "$j" /dev/"$sysDrive" >/dev/null 2>&1
+        done
+  
+    sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
+    syspartnumbercheck
+  
+    for (( k=1; k<=5; k++ ))
+       do
+         sgdisk -r "$k":$((k+5)) /dev/"$sysDrive" >/dev/null 2>&1
+       done
+ 
+    sgdisk --backup=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/00_SysDrive_Windows10_STORE_SEM"$i".gpt /dev/"$sysDrive" >/dev/null 2>&1
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/00_SysDrive_Windows10_STORE_SEM"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/01_SysDrive_Windows10_STORE_SEM"$i"_protectiveMBR.gpt bs=512 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/00_SysDrive_Windows10_STORE_SEM"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/02_SysDrive_Windows10_STORE_SEM"$i"_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/00_SysDrive_Windows10_STORE_SEM"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/04_SysDrive_Windows10_STORE_SEM"$i"_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/00_SysDrive_Windows10_STORE_SEM"$i".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$i"/03_SysDrive_Windows10_STORE_SEM"$i"_GPTPartitions.gpt bs=512 skip=3 status=none
+
+    sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_"$i".gpt /dev/"$sysDrive" >/dev/null 2>&1
+
+
+for (( k=1; k<=5; k++ ))
+       do
+         sgdisk -r "$k":$((k+5)) /dev/"$sysDrive" >/dev/null 2>&1
+       done
+ 
+    
+    for (( n=6; n<=10; n++))
+       do
+         sgdisk -d "$n" /dev/"$sysDrive" >/dev/null 2>&1
+       done
+ 
+    sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
+
+    var=$(( i + 1 ))
+    sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_$var.gpt /dev/"$sysDrive" >/dev/null 2>&1
+
+    syspartnumbercheck
+    
+
+
+if [ $var -eq 2 ]; then
+    for (( k=1; k<=5; k++ ))
+       do
+         sgdisk -r "$k":$((k+5)) /dev/"$sysDrive" >/dev/null 2>&1
+       done
+    sgdisk --backup=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/00_SysDrive_Windows10_STORE_SEM"$var".gpt /dev/"$sysDrive" >/dev/null 2>&1
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/00_SysDrive_Windows10_STORE_SEM"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/01_SysDrive_Windows10_STORE_SEM"$var"_protectiveMBR.gpt bs=512 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/00_SysDrive_Windows10_STORE_SEM"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/02_SysDrive_Windows10_STORE_SEM"$var"_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/00_SysDrive_Windows10_STORE_SEM"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/04_SysDrive_Windows10_STORE_SEM"$var"_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+    dd if=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/00_SysDrive_Windows10_STORE_SEM"$var".gpt of=$saveDIR/$sysDrive/Windows10_STORE_SEM"$var"/03_SysDrive_Windows10_STORE_SEM"$var"_GPTPartitions.gpt bs=512 skip=3 status=none
+  break 
+fi
+
+done
+sgdisk --load-backup=$saveDIR/$sysDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$sysDrive" >/dev/null 2>&1
+syspartnumbercheck
+echo "Gotovo"
+
+echo Korak19
+# Saving Linux1-2 DATA drive Partitions
+echo "Spremam Backup Linux1-2 DATA drive GPT strukture"
+datapartnumbercheck
+for (( i=2; i<=totalDataDrivePartitions; i++ ))
+do
+ sgdisk --delete="$i" /dev/"$dataDrive" >/dev/null 2>&1
+done
+ sgdisk --sort /dev/"$dataDrive" >/dev/null 2>&1
+ sgdisk --backup=$saveDIR/$dataDrive/Linux1/00_DataDrive_Linux1.gpt /dev/"$dataDrive"
+dd if=$saveDIR/$dataDrive/Linux1/00_DataDrive_Linux1.gpt of=$saveDIR/$dataDrive/Linux1/01_DataDrive_Linux1_protectiveMBR.gpt bs=512 count=1 status=none
+dd if=$saveDIR/$dataDrive/Linux1/00_DataDrive_Linux1.gpt of=$saveDIR/$dataDrive/Linux1/02_DataDrive_Linux1_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+dd if=$saveDIR/$dataDrive/Linux1/00_DataDrive_Linux1.gpt of=$saveDIR/$dataDrive/Linux1/04_DataDrive_Linux1_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+dd if=$saveDIR/$dataDrive/Linux1/00_DataDrive_Linux1.gpt of=$saveDIR/$dataDrive/Linux1/03_DataDrive_Linux1_GPTPartitions.gpt bs=512 skip=3 status=none
+sgdisk --load-backup=$saveDIR/$dataDrive/00_DataDrive_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
+
+datapartnumbercheck
+for (( i=3; i<=totalDataDrivePartitions; i++ ))
+do
+ sgdisk --delete="$i" /dev/"$dataDrive" >/dev/null 2>&1
+done
+
+sgdisk --delete=1 /dev/"$dataDrive" >/dev/null 2>&1
+
+ sgdisk --sort /dev/"$dataDrive" >/dev/null 2>&1
+ sgdisk --backup=$saveDIR/$dataDrive/Linux2/00_DataDrive_Linux2.gpt /dev/"$dataDrive"
+dd if=$saveDIR/$dataDrive/Linux2/00_DataDrive_Linux2.gpt of=$saveDIR/$dataDrive/Linux2/01_DataDrive_Linux2_protectiveMBR.gpt bs=512 count=1 status=none
+dd if=$saveDIR/$dataDrive/Linux2/00_DataDrive_Linux2.gpt of=$saveDIR/$dataDrive/Linux2/02_DataDrive_Linux2_primaryHEADER.gpt bs=512 skip=1 count=1 status=none
+dd if=$saveDIR/$dataDrive/Linux2/00_DataDrive_Linux2.gpt of=$saveDIR/$dataDrive/Linux2/04_DataDrive_Linux2_backupHEADER.gpt bs=512 skip=2 count=1 status=none
+dd if=$saveDIR/$dataDrive/Linux2/00_DataDrive_Linux2.gpt of=$saveDIR/$dataDrive/Linux2/03_DataDrive_Linux2_GPTPartitions.gpt bs=512 skip=3 status=none
+sgdisk --load-backup=$saveDIR/$dataDrive/00_DataDrive_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
+
+
+echo "Gotovo"
+
+
+echo Korak20
+# Saving GEN1-5 DATA drive Partitions
+echo "Spremam Backup GEN1-5 DATA drive GPT strukture"
+datapartnumbercheck
+
+echo Korak21
+# Saving RAZNO DATA drive Partitions
+echo "Spremam Backup RAZNO DATA drive GPT strukture"
+datapartnumbercheck
+
+echo Korak22
+# Saving SEM1-2 DATA drive Partitions
+echo "Spremam Backup SEM1-2 DATA drive GPT strukture"
+datapartnumbercheck
+
+echo Korak23
+# Saving STORE DATA drive Partitions
+echo "Spremam Backup STORE DATA drive GPT strukture"
+datapartnumbercheck
 
 ##<<'###BLOCK-COMMENT'
 ###BLOCK-COMMENT
-
