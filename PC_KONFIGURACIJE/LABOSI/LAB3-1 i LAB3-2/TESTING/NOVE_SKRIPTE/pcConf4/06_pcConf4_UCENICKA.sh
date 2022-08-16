@@ -48,7 +48,7 @@ function syspartnumbercheck(){
 function datapartnumbercheck(){
   partprobe >/dev/null 2>&1
   sleep 2
-  totalDataDrivePartitions=$(grep -c "$dataDrive"[0-9] /proc/partitions)
+  totalDataDrivePartitions=$(grep -c "$dataDrive""p"[0-9] /proc/partitions)
 }
 
 # Define SSD and HDD
@@ -315,7 +315,9 @@ do
 done
 
 sgdisk --sort /dev/"$sysDrive" >/dev/null 2>&1
+
 syspartnumbercheck
+
 echo "Brisanje svega nakon GENx particija"
 for (( i=26; i<=totalSysDrivePartitions; i++ ))
 do
@@ -776,7 +778,7 @@ echo "Gotovo"
 echo Korak19
 # Saving Linux1-2 DATA drive Partitions
 echo "Spremam Backup Linux1-2 DATA drive GPT strukture"
-datapartnumbercheck
+
 for (( i=2; i<=totalDataDrivePartitions; i++ ))
 do
  sgdisk --delete="$i" /dev/"$dataDrive" >/dev/null 2>&1
@@ -830,9 +832,10 @@ do
 done
 echo "Čišćenje gotovo"
 
-echo "Spremam Backup GEN1-5 GPT strukture"
+
 sgdisk --backup=$saveDIR/$dataDrive/00_DataDrive_CLEANED_PARTITIONS_1.gpt /dev/"$dataDrive" >/dev/null 2>&1
 datapartnumbercheck
+
 
 for (( i=1; i<=5; i++ ))
     do
@@ -855,7 +858,7 @@ for (( i=1; i<=5; i++ ))
     sgdisk --sort /dev/"$dataDrive" >/dev/null 2>&1
 
     var=$(( i + 1 ))
-    sgdisk --backup=$saveDIR/$sysDrive/00_SysDrive_CLEANED_PARTITIONS_$var.gpt /dev/"$sysDrive" >/dev/null 2>&1
+    sgdisk --backup=$saveDIR/$dataDrive/00_DataDrive_CLEANED_PARTITIONS_$var.gpt /dev/"$dataDrive" >/dev/null 2>&1
 
     datapartnumbercheck
    
@@ -869,7 +872,7 @@ if [ $var -eq 5 ]; then
 fi
 
 done
-sgdisk --load-backup=$saveDIR/$dataDrive/00_SysDrive_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
+sgdisk --load-backup=$saveDIR/$dataDrive/00_DataDrive_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
 datapartnumbercheck
 echo "Gotovo"
 
@@ -959,6 +962,8 @@ sgdisk --backup=$saveDIR/$dataDrive/Windows10_STORE/00_DataDrive_Windows10_STORE
 sgdisk --load-backup=$saveDIR/$dataDrive/00_DataDrive_ALLPARTITIONS.gpt /dev/"$dataDrive" >/dev/null 2>&1
 
 datapartnumbercheck
+
+echo "Gotovo"
 
 ##<<'###BLOCK-COMMENT'
 ###BLOCK-COMMENT

@@ -40,7 +40,7 @@ select yn in "Da" "Ne";do
 done
 
 sleep 5
-partprobe
+partprobe >/dev/null 2>&1
 sleep 5
 sync
 sleep 5
