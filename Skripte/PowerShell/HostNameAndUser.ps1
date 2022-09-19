@@ -1,3 +1,7 @@
+powercfg -x  -standby-timeout-ac 0
+powercfg -x  -standby-timeout-dc 0
+
+
 $ipAddress = Get-NetIPAddress | Where-Object { $_.IPaddress -like "192.168.*" -and $_.PrefixOrigin -notmatch "Manual"} | Select-Object -ExpandProperty IPaddress
 
 $networkPortion = $ipAddress.Split(".")[2]
@@ -26,7 +30,7 @@ if ( $hostPortion -In 10..22 ) {
 
 } elseif ( $hostPortion -In 50..62 ) {
 
-    $hostValue = '{0:d2}' -f ($hostPortion - 10)
+    $hostValue = '{0:d2}' -f ($hostPortion - 50)
 
 }  else {
 
@@ -40,14 +44,14 @@ Rename-Computer -NewName WS"$hostValue$labLocation"
 
 
 # Username and Password
-$username = WS$hostValue
+$username = -join("WS",$hostValue)
 $password = ConvertTo-SecureString $username -AsPlainText -Force  # Super strong plane text password here (yes this isn't secure at all)
 
 # Creating the user
-New-LocalUser -Name "$username" -Password $password -FullName "$username" -Description "$username"
+New-LocalUser -Name $username -Password $password -FullName $username -Description $username
 
 
 
-Add-LocalGroupMember -Groups Administrators -Member $username
+Add-LocalGroupMember -Group Administrators -Member $username
 
-Restart-Computer
+Restart-Computer -Force
