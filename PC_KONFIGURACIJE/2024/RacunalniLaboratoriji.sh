@@ -6,6 +6,10 @@ dataDrive=sda
 sysDrive=nvme0n1
 
 
+#Clear all GPT structures
+sgdisk --zap-all /dev/$dataDrive >/dev/null 2>&1
+sgdisk --zap-all /dev/$sysDrive >/dev/null 2>&1
+
 # Create GPT structure
 sgdisk  --mbrtogpt /dev/$dataDrive >/dev/null 2>&1
 sgdisk  --mbrtogpt /dev/$sysDrive >/dev/null 2>&1
@@ -103,10 +107,10 @@ sgdisk --partition-guid=28:54535242-4D42-4D53-57494E303234 /dev/nvme0n1
 
 #Creating Filesystems
 #Linux SWAP
-mkswap /dev/DEVICEPARTITION2
+mkswap /dev/nvme0n1p2
 #Linux EXT4
-for i in {3,4}; do mkfs.ext4 /dev/DEVICEPARTITION; done
+for i in {3,4}; do mkfs.ext4 /dev/nvme0n1p$i; done
 #WinXY FAT32
-for i in {1,5,9,13,17,21,25}; do mkfs.vfat -F 32 /dev/DEVICEPARTITION; done
+for i in {1,5,9,13,17,21,25}; do mkfs.vfat -F 32 /dev/nvme0n1p$i; done
 #WinXY NTFS
-for i in {7,8,11,12,15,16,19,20,23,24,27,28}; do mkfs.ntfs -Q /dev/DEVICEPARTITION; done
+for i in {7,8,11,12,15,16,19,20,23,24,27,28}; do mkfs.ntfs -Q /dev/nvme0n1p$i; done
