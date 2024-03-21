@@ -62,46 +62,46 @@ sgdisk -n 0:0:+10GiB -t 0:2700 -c 0:"MS Recovery"  /dev/"$sysDrive" >/dev/null 2
 
 #Modify Partitions UUID
 #Linux
-sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-4C494E303031 /dev/nvme0n1
-sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-4C494E303032 /dev/nvme0n1
-sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-4C494E303033 /dev/nvme0n1
-sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-4C494E303034 /dev/nvme0n1
+sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-4C494E303031 /dev/$sysDrive
+sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-4C494E303032 /dev/$sysDrive
+sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-4C494E303033 /dev/$sysDrive
+sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-4C494E303034 /dev/$sysDrive
 
 #Win01
-sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-57494E303031 /dev/nvme0n1
-sgdisk --partition-guid=6:54535242-4D42-4D53-5A47-57494E303032 /dev/nvme0n1
-sgdisk --partition-guid=7:54535242-4D42-4D53-5A47-57494E303033 /dev/nvme0n1
-sgdisk --partition-guid=8:54535242-4D42-4D53-5A47-57494E303034 /dev/nvme0n1
+sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-57494E303031 /dev/$sysDrive
+sgdisk --partition-guid=6:54535242-4D42-4D53-5A47-57494E303032 /dev/$sysDrive
+sgdisk --partition-guid=7:54535242-4D42-4D53-5A47-57494E303033 /dev/$sysDrive
+sgdisk --partition-guid=8:54535242-4D42-4D53-5A47-57494E303034 /dev/$sysDrive
 
 #Win02
-sgdisk --partition-guid=9:54535242-4D42-4D53-5A47-57494E303035 /dev/nvme0n1
-sgdisk --partition-guid=10:54535242-4D42-4D53-5A47-57494E303036 /dev/nvme0n1
-sgdisk --partition-guid=11:54535242-4D42-4D53-5A47-57494E303037 /dev/nvme0n1
-sgdisk --partition-guid=12:54535242-4D42-4D53-5A47-57494E303038 /dev/nvme0n1
+sgdisk --partition-guid=9:54535242-4D42-4D53-5A47-57494E303035 /dev/$sysDrive
+sgdisk --partition-guid=10:54535242-4D42-4D53-5A47-57494E303036 /dev/$sysDrive
+sgdisk --partition-guid=11:54535242-4D42-4D53-5A47-57494E303037 /dev/$sysDrive
+sgdisk --partition-guid=12:54535242-4D42-4D53-5A47-57494E303038 /dev/$sysDrive
 
 #Win03
-sgdisk --partition-guid=13:54535242-4D42-4D53-5A47-57494E303039 /dev/nvme0n1
-sgdisk --partition-guid=14:54535242-4D42-4D53-5A47-57494E303130 /dev/nvme0n1
-sgdisk --partition-guid=15:54535242-4D42-4D53-5A47-57494E303131 /dev/nvme0n1
-sgdisk --partition-guid=16:54535242-4D42-4D53-5A47-57494E303132 /dev/nvme0n1
+sgdisk --partition-guid=13:54535242-4D42-4D53-5A47-57494E303039 /dev/$sysDrive
+sgdisk --partition-guid=14:54535242-4D42-4D53-5A47-57494E303130 /dev/$sysDrive
+sgdisk --partition-guid=15:54535242-4D42-4D53-5A47-57494E303131 /dev/$sysDrive
+sgdisk --partition-guid=16:54535242-4D42-4D53-5A47-57494E303132 /dev/$sysDrive
 
 #Win04
-sgdisk --partition-guid=17:54535242-4D42-4D53-5A47-57494E303133 /dev/nvme0n1
-sgdisk --partition-guid=18:54535242-4D42-4D53-5A47-57494E303134 /dev/nvme0n1
-sgdisk --partition-guid=19:54535242-4D42-4D53-5A47-57494E303135 /dev/nvme0n1
-sgdisk --partition-guid=20:54535242-4D42-4D53-5A47-57494E303136 /dev/nvme0n1
+sgdisk --partition-guid=17:54535242-4D42-4D53-5A47-57494E303133 /dev/$sysDrive
+sgdisk --partition-guid=18:54535242-4D42-4D53-5A47-57494E303134 /dev/$sysDrive
+sgdisk --partition-guid=19:54535242-4D42-4D53-5A47-57494E303135 /dev/$sysDrive
+sgdisk --partition-guid=20:54535242-4D42-4D53-5A47-57494E303136 /dev/$sysDrive
 
 #Win05
-sgdisk --partition-guid=21:54535242-4D42-4D53-5A47-57494E303137 /dev/nvme0n1
-sgdisk --partition-guid=22:54535242-4D42-4D53-5A47-57494E303138 /dev/nvme0n1
-sgdisk --partition-guid=23:54535242-4D42-4D53-5A47-57494E303139 /dev/nvme0n1
-sgdisk --partition-guid=24:54535242-4D42-4D53-5A47-57494E303230 /dev/nvme0n1
+sgdisk --partition-guid=21:54535242-4D42-4D53-5A47-57494E303137 /dev/$sysDrive
+sgdisk --partition-guid=22:54535242-4D42-4D53-5A47-57494E303138 /dev/$sysDrive
+sgdisk --partition-guid=23:54535242-4D42-4D53-5A47-57494E303139 /dev/$sysDrive
+sgdisk --partition-guid=24:54535242-4D42-4D53-5A47-57494E303230 /dev/$sysDrive
 
 #Win06
-sgdisk --partition-guid=25:54535242-4D42-4D53-5A47-57494E303231 /dev/nvme0n1
-sgdisk --partition-guid=26:54535242-4D42-4D53-5A47-57494E303232 /dev/nvme0n1
-sgdisk --partition-guid=27:54535242-4D42-4D53-5A47-57494E303233 /dev/nvme0n1
-sgdisk --partition-guid=28:54535242-4D42-4D53-5A47-57494E303234 /dev/nvme0n1
+sgdisk --partition-guid=25:54535242-4D42-4D53-5A47-57494E303231 /dev/$sysDrive
+sgdisk --partition-guid=26:54535242-4D42-4D53-5A47-57494E303232 /dev/$sysDrive
+sgdisk --partition-guid=27:54535242-4D42-4D53-5A47-57494E303233 /dev/$sysDrive
+sgdisk --partition-guid=28:54535242-4D42-4D53-5A47-57494E303234 /dev/$sysDrive
 
 
 
@@ -114,3 +114,61 @@ for i in {3,4}; do mkfs.ext4 /dev/nvme0n1p$i; done
 for i in {1,5,9,13,17,21,25}; do mkfs.vfat -F 32 /dev/nvme0n1p$i; done
 #WinXY NTFS
 for i in {7,8,11,12,15,16,19,20,23,24,27,28}; do mkfs.ntfs -Q /dev/nvme0n1p$i; done
+
+
+#Creating GPT Backups
+mkdir ~/GPT_Backup
+#Backup All partitions
+sgdisk --backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
+
+#Backup Linux partitions
+for i in {5..28}; do sgdisk --delete=$i /dev/$sysDrive; done
+sgdisk --sort /dev/$sysDrive
+sgdisk --backup=~/GPT_Backup/Linux_Partitions.gpt /dev/$sysDrive
+sgdisk --load-backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
+
+#Backup Win01 partitions
+for i in {1..4}; do sgdisk --delete=$i /dev/$sysDrive; done
+for i in {9..28}; do sgdisk --delete=$i /dev/$sysDrive; done
+sgdisk --sort /dev/$sysDrive
+sgdisk --backup=~/GPT_Backup/Win01_Partitions.gpt /dev/$sysDrive
+sgdisk --load-backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
+
+
+#Backup Win02 partitions
+for i in {1..8}; do sgdisk --delete=$i /dev/$sysDrive; done
+for i in {13..28}; do sgdisk --delete=$i /dev/$sysDrive; done
+sgdisk --sort /dev/$sysDrive
+sgdisk --backup=~/GPT_Backup/Win02_Partitions.gpt /dev/$sysDrive
+sgdisk --load-backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
+
+
+#Backup Win03 partitions
+for i in {1..12}; do sgdisk --delete=$i /dev/$sysDrive; done
+for i in {17..28}; do sgdisk --delete=$i /dev/$sysDrive; done
+sgdisk --sort /dev/$sysDrive
+sgdisk --backup=~/GPT_Backup/Win03_Partitions.gpt /dev/$sysDrive
+sgdisk --load-backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
+
+
+#Backup Win04 partitions
+for i in {1..16}; do sgdisk --delete=$i /dev/$sysDrive; done
+for i in {21..28}; do sgdisk --delete=$i /dev/$sysDrive; done
+sgdisk --sort /dev/$sysDrive
+sgdisk --backup=~/GPT_Backup/Win04_Partitions.gpt /dev/$sysDrive
+sgdisk --load-backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
+
+
+#Backup Win05 partitions
+for i in {1..20}; do sgdisk --delete=$i /dev/$sysDrive; done
+for i in {25..28}; do sgdisk --delete=$i /dev/$sysDrive; done
+sgdisk --sort /dev/$sysDrive
+sgdisk --backup=~/GPT_Backup/Win05_Partitions.gpt /dev/$sysDrive
+sgdisk --load-backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
+
+
+#Backup Win06 partitions
+for i in {1..24}; do sgdisk --delete=$i /dev/$sysDrive; done
+sgdisk --sort /dev/$sysDrive
+sgdisk --backup=~/GPT_Backup/Win06_Partitions.gpt /dev/$sysDrive
+sgdisk --load-backup=~/GPT_Backup/All_Partitions.gpt /dev/$sysDrive
