@@ -62,46 +62,46 @@ sgdisk -n 0:0:+10GiB -t 0:2700 -c 0:"MS Recovery"  /dev/"$sysDrive" >/dev/null 2
 
 #Modify Partitions UUID
 #Linux
-sgdisk --partition-guid=1:54535242-4D42-4D53-4C494E303031 /dev/nvme0n1
-sgdisk --partition-guid=2:54535242-4D42-4D53-4C494E303032 /dev/nvme0n1
-sgdisk --partition-guid=3:54535242-4D42-4D53-4C494E303033 /dev/nvme0n1
-sgdisk --partition-guid=4:54535242-4D42-4D53-4C494E303034 /dev/nvme0n1
+sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-4C494E303031 /dev/nvme0n1
+sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-4C494E303032 /dev/nvme0n1
+sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-4C494E303033 /dev/nvme0n1
+sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-4C494E303034 /dev/nvme0n1
 
 #Win01
-sgdisk --partition-guid=5:54535242-4D42-4D53-57494E303031 /dev/nvme0n1
-sgdisk --partition-guid=6:54535242-4D42-4D53-57494E303032 /dev/nvme0n1
-sgdisk --partition-guid=7:54535242-4D42-4D53-57494E303033 /dev/nvme0n1
-sgdisk --partition-guid=8:54535242-4D42-4D53-57494E303034 /dev/nvme0n1
+sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-57494E303031 /dev/nvme0n1
+sgdisk --partition-guid=6:54535242-4D42-4D53-5A47-57494E303032 /dev/nvme0n1
+sgdisk --partition-guid=7:54535242-4D42-4D53-5A47-57494E303033 /dev/nvme0n1
+sgdisk --partition-guid=8:54535242-4D42-4D53-5A47-57494E303034 /dev/nvme0n1
 
 #Win02
-sgdisk --partition-guid=9:54535242-4D42-4D53-57494E303035 /dev/nvme0n1
-sgdisk --partition-guid=10:54535242-4D42-4D53-57494E303036 /dev/nvme0n1
-sgdisk --partition-guid=11:54535242-4D42-4D53-57494E303037 /dev/nvme0n1
-sgdisk --partition-guid=12:54535242-4D42-4D53-57494E303038 /dev/nvme0n1
+sgdisk --partition-guid=9:54535242-4D42-4D53-5A47-57494E303035 /dev/nvme0n1
+sgdisk --partition-guid=10:54535242-4D42-4D53-5A47-57494E303036 /dev/nvme0n1
+sgdisk --partition-guid=11:54535242-4D42-4D53-5A47-57494E303037 /dev/nvme0n1
+sgdisk --partition-guid=12:54535242-4D42-4D53-5A47-57494E303038 /dev/nvme0n1
 
 #Win03
-sgdisk --partition-guid=13:54535242-4D42-4D53-57494E303039 /dev/nvme0n1
-sgdisk --partition-guid=14:54535242-4D42-4D53-57494E303130 /dev/nvme0n1
-sgdisk --partition-guid=15:54535242-4D42-4D53-57494E303131 /dev/nvme0n1
-sgdisk --partition-guid=16:54535242-4D42-4D53-57494E303132 /dev/nvme0n1
+sgdisk --partition-guid=13:54535242-4D42-4D53-5A47-57494E303039 /dev/nvme0n1
+sgdisk --partition-guid=14:54535242-4D42-4D53-5A47-57494E303130 /dev/nvme0n1
+sgdisk --partition-guid=15:54535242-4D42-4D53-5A47-57494E303131 /dev/nvme0n1
+sgdisk --partition-guid=16:54535242-4D42-4D53-5A47-57494E303132 /dev/nvme0n1
 
 #Win04
-sgdisk --partition-guid=17:54535242-4D42-4D53-57494E303133 /dev/nvme0n1
-sgdisk --partition-guid=18:54535242-4D42-4D53-57494E303134 /dev/nvme0n1
-sgdisk --partition-guid=19:54535242-4D42-4D53-57494E303135 /dev/nvme0n1
-sgdisk --partition-guid=20:54535242-4D42-4D53-57494E303136 /dev/nvme0n1
+sgdisk --partition-guid=17:54535242-4D42-4D53-5A47-57494E303133 /dev/nvme0n1
+sgdisk --partition-guid=18:54535242-4D42-4D53-5A47-57494E303134 /dev/nvme0n1
+sgdisk --partition-guid=19:54535242-4D42-4D53-5A47-57494E303135 /dev/nvme0n1
+sgdisk --partition-guid=20:54535242-4D42-4D53-5A47-57494E303136 /dev/nvme0n1
 
 #Win05
-sgdisk --partition-guid=21:54535242-4D42-4D53-57494E303137 /dev/nvme0n1
-sgdisk --partition-guid=22:54535242-4D42-4D53-57494E303138 /dev/nvme0n1
-sgdisk --partition-guid=23:54535242-4D42-4D53-57494E303139 /dev/nvme0n1
-sgdisk --partition-guid=24:54535242-4D42-4D53-57494E303230 /dev/nvme0n1
+sgdisk --partition-guid=21:54535242-4D42-4D53-5A47-57494E303137 /dev/nvme0n1
+sgdisk --partition-guid=22:54535242-4D42-4D53-5A47-57494E303138 /dev/nvme0n1
+sgdisk --partition-guid=23:54535242-4D42-4D53-5A47-57494E303139 /dev/nvme0n1
+sgdisk --partition-guid=24:54535242-4D42-4D53-5A47-57494E303230 /dev/nvme0n1
 
 #Win06
-sgdisk --partition-guid=25:54535242-4D42-4D53-57494E303231 /dev/nvme0n1
-sgdisk --partition-guid=26:54535242-4D42-4D53-57494E303232 /dev/nvme0n1
-sgdisk --partition-guid=27:54535242-4D42-4D53-57494E303233 /dev/nvme0n1
-sgdisk --partition-guid=28:54535242-4D42-4D53-57494E303234 /dev/nvme0n1
+sgdisk --partition-guid=25:54535242-4D42-4D53-5A47-57494E303231 /dev/nvme0n1
+sgdisk --partition-guid=26:54535242-4D42-4D53-5A47-57494E303232 /dev/nvme0n1
+sgdisk --partition-guid=27:54535242-4D42-4D53-5A47-57494E303233 /dev/nvme0n1
+sgdisk --partition-guid=28:54535242-4D42-4D53-5A47-57494E303234 /dev/nvme0n1
 
 
 
