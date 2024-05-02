@@ -2,7 +2,7 @@
 
 #Create SHARE
 #mkdir ~/share
-#mount -t cifs //192.168.100.5/WinImages $shareDir/share -o username=Administrator,password=Tsrb_1234
+#mount -t cifs //192.168.100.5/WinImages $shareDir/share -o username=Administrator
 
 shareDir=/home/ubuntu
 
