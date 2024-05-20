@@ -1,6 +1,21 @@
 #!/bin/bash
 clear
 
+##########
+# Set some options
+set -o errexit # It will exit on first error in script
+set -o pipefail # It will exit on first error in some pipeline
+##########
+
+##########
+# Check if the script is run as root
+if [ "$EUID" -ne 0 ]
+  then echo "Run the script with root permissions ( ./script_name.sh)"
+  exit 1
+fi
+#########
+
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
