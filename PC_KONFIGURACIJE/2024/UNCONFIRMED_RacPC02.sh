@@ -16,7 +16,6 @@ fi
 #########
 
 
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
@@ -189,59 +188,59 @@ mkdir /tmp/GPT02_Backup
 workDir="/tmp/GPT02_Backup"
 
 #Backup All partitions
-sgdisk --backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 #Backup Linux partitions
 for i in {5..28}; do sgdisk --delete=$i /dev/$sysDrive; done >/dev/null 2>&1
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Linux_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02Linux_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 #Backup Win01 partitions
 for i in {1..4}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 for i in {9..28}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win01_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02Win01_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 
 #Backup Win02 partitions
 for i in {1..8}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 for i in {13..28}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win02_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02Win02_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 
 #Backup Win03 partitions
 for i in {1..12}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 for i in {17..28}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win03_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02Win03_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 
 #Backup Win04 partitions
 for i in {1..16}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 for i in {21..28}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win04_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02Win04_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 
 #Backup Win05 partitions
 for i in {1..20}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 for i in {25..28}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win05_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02Win05_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 
 #Backup Win06 partitions
 for i in {1..24}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win06_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02Win06_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"
 
@@ -254,31 +253,31 @@ sgdisk --backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>
 
 for i in {2..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02G1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 sgdisk --delete=1 /dev/$dataDrive >/dev/null 2>&1
 for i in {3..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02G2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {1..2}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 for i in {4..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G3data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02G3data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {1..3}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --delete=5 /dev/$dataDrive >/dev/null 2>&1
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G4data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02G4data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {1..4}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G5data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc02G5data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc02All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 
 echo -e "${GREEN}      Done${NC}"

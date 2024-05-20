@@ -77,34 +77,34 @@ echo -n "Backupping System Partition Structures..."
 mkdir /tmp/GPT0304_Backup
 workDir="/tmp/GPT0304_Backup"
 
-sgdisk --backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc0304All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {2..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc0304G1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc0304All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 sgdisk --delete=1 /dev/$dataDrive >/dev/null 2>&1
 for i in {3..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc0304G2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc0304All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {1..2}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 for i in {4..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G3data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc0304G3data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc0304All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {1..3}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --delete=5 /dev/$dataDrive >/dev/null 2>&1
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G4data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc0304G4data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc0304All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {1..4}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G5data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/pc0304G5data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/pc0304All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"

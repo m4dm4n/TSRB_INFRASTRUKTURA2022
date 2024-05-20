@@ -16,7 +16,6 @@ fi
 #########
 
 
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
@@ -109,19 +108,19 @@ echo -e "${GREEN}      Done${NC}"
 ###########################################
 echo -n "Creating Filesystems..."
 #Linux SWAP
-mkswap /dev/"$sysDrive"p2
+mkswap /dev/"$sysDrive"p2 >/dev/null 2>&1
 #Linux EXT4
-for i in {3,4}; do mkfs.ext4 -F /dev/"$sysDrive"p"$i"; done
+for i in {3,4}; do mkfs.ext4 -F /dev/"$sysDrive"p"$i" >/dev/null 2>&1; done
 #WinXY FAT32
-for i in {1,5,9}; do mkfs.vfat -F 32 /dev/"$sysDrive"p"$i"; done
+for i in {1,5,9}; do mkfs.vfat -F 32 /dev/"$sysDrive"p"$i" >/dev/null 2>&1; done
 #WinXY NTFS
-for i in {7,8,11,12}; do mkfs.ntfs -Q /dev/"$sysDrive"p"$i"; done
+for i in {7,8,11,12}; do mkfs.ntfs -Q /dev/"$sysDrive"p"$i" >/dev/null 2>&1; done
 
 ###########################################
 #####Creating HDD Filesystems##############
 ###########################################
 #dataXY NTFS
-for i in {1,2}; do mkfs.ntfs -Q /dev/"$dataDrive""$i"; done
+for i in {1,2}; do mkfs.ntfs -Q /dev/"$dataDrive""$i" >/dev/null 2>&1; done
 
 
 echo -e "${GREEN}      Done${NC}"
@@ -136,27 +135,27 @@ mkdir /tmp/FestoGPT03_Backup
 workDir="/tmp/FestoGPT03_Backup"
 
 #Backup All partitions
-sgdisk --backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/festoAll_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 #Backup Linux partitions
 for i in {5..12}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Linux_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/festoLinux_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/festoAll_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 #Backup Win01 partitions
 for i in {1..4}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 for i in {9..12}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win01_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/festoWin01_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/festoAll_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 
 #Backup Win02 partitions
 for i in {1..8}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
 sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/Win02_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/festoWin02_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/festoAll_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"
 
@@ -165,16 +164,16 @@ echo -e "${GREEN}      Done${NC}"
 ######Creating Data GPT Backups##########
 ###########################################
 echo -n "Backupping Data Partition Structures..."
-sgdisk --backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/festoAll_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 sgdisk --delete=2 /dev/$dataDrive >/dev/null 2>&1
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/festoG1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/festoAll_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 sgdisk --delete=1 /dev/$dataDrive >/dev/null 2>&1
 sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
-sgdisk --backup="$workDir"/G2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/festoG2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/festoAll_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"

@@ -10,7 +10,7 @@ invalid_input() {
 }
 
 echo "Odabirom opcije u skripti, računalo će izvršiti reboot, te će se
-      učitati verzija Windowsa ovisno o generaciji razreda u kojem se nalazite.
+      učitati verzija Windowsa ovisno o razini obrazovanja u kojoj se nalazite.
 
       Odaberite broj 1 za 1. razred
       Odaberite broj 2 za 2. razred
@@ -22,26 +22,26 @@ while true; do
     read -p "Odaberite broj za razinu razreda u kojoj se nalazite (1,2,3,4): " i
     case $i in
         1)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/Win01_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/G1data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win01_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc0304G1data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
         2)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/Win02_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/G2data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win02_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc0304G2data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
         3)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/Win03_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/G3data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win03_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc0304G3data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
         4)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/Win04_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/G4data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win04_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPT_Tablice/pc0304G4data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
@@ -53,12 +53,12 @@ while true; do
                  if [[ $hashed_input == $stored_password5 ]]; then
                  #echo "Password is correct"
                  #exit 0
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/Win05_Partitions.gpt /dev/nvme0n1
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/G5data_Partition.gpt /dev/sda
+                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win05_Partitions.gpt /dev/nvme0n1
+                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc0304G5data_Partition.gpt /dev/sda
                  sudo reboot
                  fi
             done < $password_file
-            echo "Password is incorrect."
+            echo "Lozinka je netočna."
             invalid_input
             ;;
         6)
@@ -69,12 +69,12 @@ while true; do
                  if [[ $hashed_input == $stored_password6 ]]; then
                  #echo "Password is correct"
                  #exit 0
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/Win06_Partitions.gpt /dev/nvme0n1
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/PC0304/G5data_Partition.gpt /dev/sda
+                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win06_Partitions.gpt /dev/nvme0n1
+                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc0304G5data_Partition.gpt /dev/sda
                  sudo reboot
                  fi
             done < $password_file
-            echo "Password is incorrect."
+            echo "Lozinka je netočna."
             invalid_input
             ;;
         *)
