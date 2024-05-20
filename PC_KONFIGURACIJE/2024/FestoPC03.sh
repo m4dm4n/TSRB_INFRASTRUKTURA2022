@@ -10,7 +10,7 @@ set -o pipefail # It will exit on first error in some pipeline
 ##########
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]
-  then echo "Run the script with root permissions ( ./script_name.sh)"
+  then echo "Run the script with root permissions (sudo ./script_name.sh)"
   exit 1
 fi
 #########
@@ -78,27 +78,27 @@ echo -e "${GREEN}      Done${NC}"
 ############################################
 echo -n "Modifying Partitions UUIDs..."
 #Linux
-sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-4C494E303031 /dev/$sysDrive
-sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-4C494E303032 /dev/$sysDrive
-sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-4C494E303033 /dev/$sysDrive
-sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-4C494E303034 /dev/$sysDrive
+sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-4C494E303031 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-4C494E303032 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-4C494E303033 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-4C494E303034 /dev/$sysDrive >/dev/null 2>&1
 
 #Win01
-sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-57494E303031 /dev/$sysDrive
-sgdisk --partition-guid=6:54535242-4D42-4D53-5A47-57494E303032 /dev/$sysDrive
-sgdisk --partition-guid=7:54535242-4D42-4D53-5A47-57494E303033 /dev/$sysDrive
-sgdisk --partition-guid=8:54535242-4D42-4D53-5A47-57494E303034 /dev/$sysDrive
+sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-57494E303031 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=6:54535242-4D42-4D53-5A47-57494E303032 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=7:54535242-4D42-4D53-5A47-57494E303033 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=8:54535242-4D42-4D53-5A47-57494E303034 /dev/$sysDrive >/dev/null 2>&1
 
 #Win02
-sgdisk --partition-guid=9:54535242-4D42-4D53-5A47-57494E303035 /dev/$sysDrive
-sgdisk --partition-guid=10:54535242-4D42-4D53-5A47-57494E303036 /dev/$sysDrive
-sgdisk --partition-guid=11:54535242-4D42-4D53-5A47-57494E303037 /dev/$sysDrive
-sgdisk --partition-guid=12:54535242-4D42-4D53-5A47-57494E303038 /dev/$sysDrive
+sgdisk --partition-guid=9:54535242-4D42-4D53-5A47-57494E303035 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=10:54535242-4D42-4D53-5A47-57494E303036 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=11:54535242-4D42-4D53-5A47-57494E303037 /dev/$sysDrive >/dev/null 2>&1
+sgdisk --partition-guid=12:54535242-4D42-4D53-5A47-57494E303038 /dev/$sysDrive >/dev/null 2>&1
 
 
 #DATA PARTITIONS
-sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-484444303031 /dev/$dataDrive
-sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-484444303032 /dev/$dataDrive
+sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-484444303031 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-484444303032 /dev/$dataDrive >/dev/null 2>&1
 
 
 echo -e "${GREEN}      Done${NC}"   
@@ -136,27 +136,27 @@ mkdir /tmp/FestoGPT03_Backup
 workDir="/tmp/FestoGPT03_Backup"
 
 #Backup All partitions
-sgdisk --backup="$workDir"/All_Partitions.gpt /dev/$sysDrive
+sgdisk --backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 #Backup Linux partitions
-for i in {5..12}; do sgdisk --delete=$i /dev/$sysDrive; done
-sgdisk --sort /dev/$sysDrive
-sgdisk --backup="$workDir"/Linux_Partitions.gpt /dev/$sysDrive
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive
+for i in {5..12}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
+sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/Linux_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 #Backup Win01 partitions
-for i in {1..4}; do sgdisk --delete=$i /dev/$sysDrive; done
-for i in {9..12}; do sgdisk --delete=$i /dev/$sysDrive; done
-sgdisk --sort /dev/$sysDrive
-sgdisk --backup="$workDir"/Win01_Partitions.gpt /dev/$sysDrive
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive
+for i in {1..4}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
+for i in {9..12}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
+sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/Win01_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 
 #Backup Win02 partitions
-for i in {1..8}; do sgdisk --delete=$i /dev/$sysDrive; done
-sgdisk --sort /dev/$sysDrive
-sgdisk --backup="$workDir"/Win02_Partitions.gpt /dev/$sysDrive
-sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive
+for i in {1..8}; do sgdisk --delete=$i /dev/$sysDrive >/dev/null 2>&1; done
+sgdisk --sort /dev/$sysDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/Win02_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Partitions.gpt /dev/$sysDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"
 
@@ -165,16 +165,16 @@ echo -e "${GREEN}      Done${NC}"
 ######Creating Data GPT Backups##########
 ###########################################
 echo -n "Backupping Data Partition Structures..."
-sgdisk --backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+sgdisk --backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-sgdisk --delete=2 /dev/$dataDrive
-sgdisk --sort /dev/$dataDrive
-sgdisk --backup="$workDir"/G1data_Partition.gpt /dev/$dataDrive
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+sgdisk --delete=2 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/G1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-sgdisk --delete=1 /dev/$dataDrive
-sgdisk --sort /dev/$dataDrive
-sgdisk --backup="$workDir"/G2data_Partition.gpt /dev/$dataDrive
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+sgdisk --delete=1 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/G2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"

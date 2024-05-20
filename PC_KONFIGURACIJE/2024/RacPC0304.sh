@@ -10,7 +10,7 @@ set -o pipefail # It will exit on first error in some pipeline
 ##########
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]
-  then echo "Run the script with root permissions ( ./script_name.sh)"
+  then echo "Run the script with root permissions (sudo ./script_name.sh)"
   exit 1
 fi
 #########
@@ -53,11 +53,11 @@ echo -e "${GREEN}      Done${NC}"
 ############################################
 echo -n "Modifying Partitions UUIDs..."
 #DATA PARTITIONS
-sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-484444303031 /dev/$dataDrive
-sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-484444303032 /dev/$dataDrive
-sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-484444303033 /dev/$dataDrive
-sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-484444303034 /dev/$dataDrive
-sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-484444303035 /dev/$dataDrive
+sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-484444303031 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-484444303032 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-484444303033 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-484444303034 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-484444303035 /dev/$dataDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"
 
@@ -66,7 +66,7 @@ echo -e "${GREEN}      Done${NC}"
 ###########################################
 echo -n "Creating Filesystems..."
 #dataXY NTFS
-for i in {1..5}; do mkfs.ntfs -Q /dev/sda$i; done
+for i in {1..5}; do mkfs.ntfs -Q /dev/"$dataDrive"$i >/dev/null 2>&1; done
 
 echo -e "${GREEN}      Done${NC}"
 
@@ -77,34 +77,34 @@ echo -n "Backupping System Partition Structures..."
 mkdir /tmp/GPT0304_Backup
 workDir="/tmp/GPT0304_Backup"
 
-sgdisk --backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+sgdisk --backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-for i in {2..5}; do sgdisk --delete=$i /dev/$dataDrive; done
-sgdisk --sort /dev/$dataDrive
-sgdisk --backup="$workDir"/G1data_Partition.gpt /dev/$dataDrive
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+for i in {2..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
+sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/G1data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-sgdisk --delete=1 /dev/$dataDrive
-for i in {3..5}; do sgdisk --delete=$i /dev/$dataDrive; done
-sgdisk --sort /dev/$dataDrive
-sgdisk --backup="$workDir"/G2data_Partition.gpt /dev/$dataDrive
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+sgdisk --delete=1 /dev/$dataDrive >/dev/null 2>&1
+for i in {3..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
+sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/G2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-for i in {1..2}; do sgdisk --delete=$i /dev/$dataDrive; done
-for i in {4..5}; do sgdisk --delete=$i /dev/$dataDrive; done
-sgdisk --sort /dev/$dataDrive
-sgdisk --backup="$workDir"/G3data_Partition.gpt /dev/$dataDrive
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+for i in {1..2}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
+for i in {4..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
+sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/G3data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-for i in {1..3}; do sgdisk --delete=$i /dev/$dataDrive; done
-sgdisk --delete=5 /dev/$dataDrive
-sgdisk --sort /dev/$dataDrive
-sgdisk --backup="$workDir"/G4data_Partition.gpt /dev/$dataDrive
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+for i in {1..3}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
+sgdisk --delete=5 /dev/$dataDrive >/dev/null 2>&1
+sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/G4data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-for i in {1..4}; do sgdisk --delete=$i /dev/$dataDrive; done
-sgdisk --sort /dev/$dataDrive
-sgdisk --backup="$workDir"/G5data_Partition.gpt /dev/$dataDrive
-sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive
+for i in {1..4}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done
+sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
+sgdisk --backup="$workDir"/G5data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
+sgdisk --load-backup="$workDir"/All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 echo -e "${GREEN}      Done${NC}"
