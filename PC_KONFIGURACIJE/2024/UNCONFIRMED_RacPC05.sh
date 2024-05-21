@@ -191,7 +191,7 @@ echo -e "${GREEN}                        Done${NC}"
 ###########################################
 ######Creating System GPT Backups##########
 ###########################################
-echo -n "Backupping System Partition Structures..."
+echo -n "Backuping System Partition Structures..."
 mkdir /tmp/GPT05_Backup
 workDir="/tmp/GPT05_Backup"
 
@@ -260,7 +260,7 @@ echo -e "${GREEN}      Done${NC}"
 ###########################################
 ######Creating Data GPT Backups##########
 ###########################################
-echo -n "Backupping Data Partition Structures..."
+echo -n "Backuping Data Partition Structures..."
 sgdisk --backup="$workDir"/pc05All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 for i in {2..5}; do sgdisk --delete=$i /dev/$dataDrive >/dev/null 2>&1; done

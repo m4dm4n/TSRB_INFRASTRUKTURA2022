@@ -129,7 +129,7 @@ echo -e "${GREEN}                        Done${NC}"
 ###########################################
 ######Creating System GPT Backups##########
 ###########################################
-echo -n "Backupping System Partition Structures..."
+echo -n "Backuping System Partition Structures..."
 
 mkdir /tmp/FestoGPT03_Backup
 workDir="/tmp/FestoGPT03_Backup"
@@ -163,7 +163,7 @@ echo -e "${GREEN}      Done${NC}"
 ###########################################
 ######Creating Data GPT Backups##########
 ###########################################
-echo -n "Backupping Data Partition Structures..."
+echo -n "Backuping Data Partition Structures..."
 sgdisk --backup="$workDir"/festoAll_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 sgdisk --delete=2 /dev/$dataDrive >/dev/null 2>&1

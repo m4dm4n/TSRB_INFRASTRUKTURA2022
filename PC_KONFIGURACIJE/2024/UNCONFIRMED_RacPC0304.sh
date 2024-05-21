@@ -71,7 +71,7 @@ echo -e "${GREEN}                        Done${NC}"
 ###########################################
 ######Creating Data GPT Backups##########
 ###########################################
-echo -n "Backupping Data Partition Structures..."
+echo -n "Backuping Data Partition Structures..."
 mkdir /tmp/GPT0304_Backup
 workDir="/tmp/GPT0304_Backup"
 
