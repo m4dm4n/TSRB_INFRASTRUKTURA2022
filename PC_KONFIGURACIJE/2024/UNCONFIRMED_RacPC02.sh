@@ -280,5 +280,5 @@ sgdisk --backup="$workDir"/pc02G5data_Partition.gpt /dev/$dataDrive >/dev/null 2
 sgdisk --load-backup="$workDir"/pc02All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 
-echo -e "${GREEN}                Done${NC}"
-echo -e "${GREEN} All Done ${NC}"
+echo -e "${GREEN}        Done${NC}"
+echo -e "${GREEN}                                         All Done ${NC}"
