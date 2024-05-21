@@ -29,13 +29,13 @@ sysDrive=nvme0n1
 echo -n "Zapping previous GPT structures..."
 sgdisk --zap-all /dev/$dataDrive >/dev/null 2>&1
 sgdisk --zap-all /dev/$sysDrive >/dev/null 2>&1
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}             Done${NC}"
 
 # Create GPT structure
 echo -n "Creating new GPT structures..."
 sgdisk  --mbrtogpt /dev/$dataDrive >/dev/null 2>&1
 sgdisk  --mbrtogpt /dev/$sysDrive >/dev/null 2>&1
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                 Done${NC}"
 
 
 ###########################################
@@ -84,7 +84,7 @@ sgdisk -n 0:0:+128MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/"$sysDrive" >/dev/null 
 sgdisk -n 0:0:+100GiB -t 0:0700 -c 0:"WindowsSEM"  /dev/$sysDrive >/dev/null 2>&1
 sgdisk -n 0:0:+10GiB -t 0:2700 -c 0:"MS Recovery"  /dev/"$sysDrive" >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                  Done${NC}"
 
 
 
@@ -104,7 +104,7 @@ sgdisk -n 0:0:+500GiB -t 0:0700 -c 0:"G3Data" /dev/$dataDrive >/dev/null 2>&1
 sgdisk -n 0:0:+500GiB -t 0:0700 -c 0:"G4Data" /dev/$dataDrive >/dev/null 2>&1
 sgdisk -n 0:0:+1000GiB -t 0:0700 -c 0:"G5Data" /dev/$dataDrive >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                    Done${NC}"
 
 ############################################
 #########Modify Partitions UUID#############
@@ -164,7 +164,7 @@ sgdisk --partition-guid=3:54535242-4D42-4D53-5A47-484444303033 /dev/$dataDrive >
 sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-484444303034 /dev/$dataDrive >/dev/null 2>&1
 sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-484444303035 /dev/$dataDrive >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                  Done${NC}"   
 
 ###########################################
 ####Creating NVME Filesystems##############
@@ -185,7 +185,7 @@ for i in {7,8,11,12,15,16,19,20,23,24,27,28,29,30,31}; do mkfs.ntfs -Q /dev/"$sy
 #dataXY NTFS
 for i in {1..5}; do mkfs.ntfs -Q /dev/"$dataDrive""$i" >/dev/null 2>&1; done
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                        Done${NC}"
 
 
 ###########################################
@@ -292,4 +292,5 @@ sgdisk --backup="$workDir"/pc05G5data_Partition.gpt /dev/$dataDrive >/dev/null 2
 sgdisk --load-backup="$workDir"/pc05All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}        Done${NC}"
+echo -e "${GREEN}                                               All Done ${NC}"

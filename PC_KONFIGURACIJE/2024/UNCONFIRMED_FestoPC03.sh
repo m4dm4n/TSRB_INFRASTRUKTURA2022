@@ -29,13 +29,13 @@ sysDrive=nvme0n1
 echo -n "Zapping previous GPT structures..."
 sgdisk --zap-all /dev/$dataDrive >/dev/null 2>&1
 sgdisk --zap-all /dev/$sysDrive >/dev/null 2>&1
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}             Done${NC}"
 
 # Create GPT structure
 echo -n "Creating new GPT structures..."
 sgdisk  --mbrtogpt /dev/$dataDrive >/dev/null 2>&1
 sgdisk  --mbrtogpt /dev/$sysDrive >/dev/null 2>&1
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                 Done${NC}"
 
 ###########################################
 ###### CREATING SYSTEM PARTITIONS #########
@@ -59,7 +59,7 @@ sgdisk -n 0:0:+128MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/"$sysDrive" >/dev/null 
 sgdisk -n 0:0:+400GiB -t 0:0700 -c 0:"Windows02"  /dev/$sysDrive >/dev/null 2>&1
 sgdisk -n 0:0:+10GiB -t 0:2700 -c 0:"MS Recovery"  /dev/"$sysDrive" >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                  Done${NC}"
 
 
 ###########################################
@@ -69,7 +69,7 @@ echo -n "Creating Data Partitions..."
 sgdisk -n 1:1MiB:900GiB -t 0:0700 -c 0:"G1Data" /dev/$dataDrive >/dev/null 2>&1
 sgdisk -n 0:0:+900GiB -t 0:0700 -c 0:"G2Data" /dev/$dataDrive >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                    Done${NC}"
 
 
 ############################################
@@ -100,7 +100,7 @@ sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-484444303031 /dev/$dataDrive >
 sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-484444303032 /dev/$dataDrive >/dev/null 2>&1
 
 
-echo -e "${GREEN}      Done${NC}"   
+echo -e "${GREEN}                  Done${NC}"    
 
 
 ###########################################
@@ -123,7 +123,7 @@ for i in {7,8,11,12}; do mkfs.ntfs -Q /dev/"$sysDrive"p"$i" >/dev/null 2>&1; don
 for i in {1,2}; do mkfs.ntfs -Q /dev/"$dataDrive""$i" >/dev/null 2>&1; done
 
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                        Done${NC}"
 
 
 ###########################################
@@ -176,4 +176,5 @@ sgdisk --sort /dev/$dataDrive >/dev/null 2>&1
 sgdisk --backup="$workDir"/festoG2data_Partition.gpt /dev/$dataDrive >/dev/null 2>&1
 sgdisk --load-backup="$workDir"/festoAll_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}        Done${NC}"
+echo -e "${GREEN}                                               All Done ${NC}"
