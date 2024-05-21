@@ -29,13 +29,13 @@ sysDrive=nvme0n1
 echo -n "Zapping previous GPT structures..."
 sgdisk --zap-all /dev/$dataDrive >/dev/null 2>&1
 sgdisk --zap-all /dev/$sysDrive >/dev/null 2>&1
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}          Done${NC}"
 
 # Create GPT structure
 echo -n "Creating new GPT structures..."
 sgdisk  --mbrtogpt /dev/$dataDrive >/dev/null 2>&1
 sgdisk  --mbrtogpt /dev/$sysDrive >/dev/null 2>&1
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}              Done${NC}"
 
 ###########################################
 ###### CREATING SYSTEM PARTITIONS #########
@@ -83,7 +83,7 @@ sgdisk -n 0:0:+128MiB -t 0:0c01 -c 0:"MS Reserved"  /dev/"$sysDrive" >/dev/null 
 sgdisk -n 0:0:+100GiB -t 0:0700 -c 0:"WindowsSEM"  /dev/$sysDrive >/dev/null 2>&1
 sgdisk -n 0:0:+10GiB -t 0:2700 -c 0:"MS Recovery"  /dev/"$sysDrive" >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}               Done${NC}"
 
 
 ###########################################
@@ -96,7 +96,7 @@ sgdisk -n 0:0:+150GiB -t 0:0700 -c 0:"G3Data" /dev/$dataDrive >/dev/null 2>&1
 sgdisk -n 0:0:+150GiB -t 0:0700 -c 0:"G4Data" /dev/$dataDrive >/dev/null 2>&1
 sgdisk -n 0:0:+300GiB -t 0:0700 -c 0:"G5Data" /dev/$dataDrive >/dev/null 2>&1
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                  Done${NC}"
 
 
 ############################################
@@ -153,7 +153,7 @@ sgdisk --partition-guid=4:54535242-4D42-4D53-5A47-484444303034 /dev/$dataDrive >
 sgdisk --partition-guid=5:54535242-4D42-4D53-5A47-484444303035 /dev/$dataDrive >/dev/null 2>&1
 
 
-echo -e "${GREEN}      Done${NC}"   
+echo -e "${GREEN}              Done${NC}"   
 
 
 ###########################################
@@ -161,7 +161,7 @@ echo -e "${GREEN}      Done${NC}"
 ###########################################
 echo -n "Creating Filesystems..."
 #Linux SWAP
-mkswap /dev/"$sysDrive"p2
+mkswap /dev/"$sysDrive"p2 >/dev/null 2>&1
 #Linux EXT4
 for i in {3,4}; do mkfs.ext4 -F /dev/"$sysDrive"p"$i" >/dev/null 2>&1; done
 #WinXY FAT32
@@ -176,7 +176,7 @@ for i in {7,8,11,12,15,16,19,20,23,24,27,28}; do mkfs.ntfs -Q /dev/"$sysDrive"p"
 for i in {1..5}; do mkfs.ntfs -Q /dev/"$dataDrive""$i" >/dev/null 2>&1; done
 
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}                   Done${NC}"
 
 
 ###########################################
@@ -280,4 +280,5 @@ sgdisk --backup="$workDir"/pc02G5data_Partition.gpt /dev/$dataDrive >/dev/null 2
 sgdisk --load-backup="$workDir"/pc02All_Data_Partitions.gpt /dev/$dataDrive >/dev/null 2>&1
 
 
-echo -e "${GREEN}      Done${NC}"
+echo -e "${GREEN}              Done${NC}"
+echo -e "${GREEN} All Done ${NC}"
