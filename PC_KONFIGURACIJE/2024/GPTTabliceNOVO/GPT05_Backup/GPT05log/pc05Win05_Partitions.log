@@ -1,0 +1,16 @@
+Disk /dev/nvme0n1: 3907029168 sectors, 1.8 TiB
+Model: CT2000P5PSSD8                           
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): B9CC61D6-9D6B-47E7-AAC6-2F7E8361B35D
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3907029134
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 3045910637 sectors (1.4 TiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1      1112975360      1113999359   500.0 MiB   EF00  EFI System Partition
+   2      1113999360      1114261503   128.0 MiB   0C01  MS Reserved
+   3      1114261504      1323976703   100.0 GiB   0700  Windows05
+   4      1323976704      1344948223   10.0 GiB    2700  MS Recovery
+   5      3044927488      3674073087   300.0 GiB   0700  G5ssdData

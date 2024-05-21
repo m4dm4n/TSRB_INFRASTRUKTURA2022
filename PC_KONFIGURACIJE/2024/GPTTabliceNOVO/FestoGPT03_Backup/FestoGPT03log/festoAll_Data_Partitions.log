@@ -1,0 +1,13 @@
+Disk /dev/sda: 3907029168 sectors, 1.8 TiB
+Model: ST2000DM008-2UB1
+Sector size (logical/physical): 512/4096 bytes
+Disk identifier (GUID): A7DE39B9-B3C7-418B-87BA-90ED3EDFF1B3
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3907029134
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 132157548 sectors (63.0 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048      1887436800   900.0 GiB   0700  G1Data
+   2      1887438848      3774875647   900.0 GiB   0700  G2Data

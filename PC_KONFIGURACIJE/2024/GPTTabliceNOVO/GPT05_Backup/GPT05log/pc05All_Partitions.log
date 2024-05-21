@@ -1,0 +1,42 @@
+Disk /dev/nvme0n1: 3907029168 sectors, 1.8 TiB
+Model: CT2000P5PSSD8                           
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): B9CC61D6-9D6B-47E7-AAC6-2F7E8361B35D
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3907029134
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 232960108 sectors (111.1 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048         1024000   499.0 MiB   EF00  EFI System Partition
+   2         1026048        17803263   8.0 GiB     8200  swap
+   3        17803264        80717823   30.0 GiB    8304  root
+   4        80717824       185575423   50.0 GiB    8302  home
+   5       185575424       186599423   500.0 MiB   EF00  EFI System Partition
+   6       186599424       186861567   128.0 MiB   0C01  MS Reserved
+   7       186861568       396576767   100.0 GiB   0700  Windows01
+   8       396576768       417056767   9.8 GiB     2700  MS Recovery
+   9       417056768       418080767   500.0 MiB   EF00  EFI System Partition
+  10       418080768       418342911   128.0 MiB   0C01  MS Reserved
+  11       418342912       628058111   100.0 GiB   0700  Windows02
+  12       628058112       649029631   10.0 GiB    2700  MS Recovery
+  13       649029632       650053631   500.0 MiB   EF00  EFI System Partition
+  14       650053632       650315775   128.0 MiB   0C01  MS Reserved
+  15       650315776       860030975   100.0 GiB   0700  Windows03
+  16       860030976       881002495   10.0 GiB    2700  MS Recovery
+  17       881002496       882026495   500.0 MiB   EF00  EFI System Partition
+  18       882026496       882288639   128.0 MiB   0C01  MS Reserved
+  19       882288640      1092003839   100.0 GiB   0700  Windows04
+  20      1092003840      1112975359   10.0 GiB    2700  MS Recovery
+  21      1112975360      1113999359   500.0 MiB   EF00  EFI System Partition
+  22      1113999360      1114261503   128.0 MiB   0C01  MS Reserved
+  23      1114261504      1323976703   100.0 GiB   0700  Windows05
+  24      1323976704      1344948223   10.0 GiB    2700  MS Recovery
+  25      1344948224      1345972223   500.0 MiB   EF00  EFI System Partition
+  26      1345972224      1346234367   128.0 MiB   0C01  MS Reserved
+  27      1346234368      1555949567   100.0 GiB   0700  WindowsSEM
+  28      1555949568      1576921087   10.0 GiB    2700  MS Recovery
+  29      1576921088      2101209087   250.0 GiB   0700  G3ssdData
+  30      2101209088      3044927487   450.0 GiB   0700  G4ssdData
+  31      3044927488      3674073087   300.0 GiB   0700  G5ssdData

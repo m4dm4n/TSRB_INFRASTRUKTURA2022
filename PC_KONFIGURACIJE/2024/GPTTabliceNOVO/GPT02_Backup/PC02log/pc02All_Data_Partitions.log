@@ -1,0 +1,16 @@
+Disk /dev/sda: 1953525168 sectors, 931.5 GiB
+Model: TOSHIBA HDWD110 
+Sector size (logical/physical): 512/4096 bytes
+Disk identifier (GUID): 5FA68400-C9FD-4D2A-886F-1C7643A726A9
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 1953525134
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 66090348 sectors (31.5 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048       314572800   150.0 GiB   0700  G1Data
+   2       314574848       629147647   150.0 GiB   0700  G2Data
+   3       629147648       943720447   150.0 GiB   0700  G3Data
+   4       943720448      1258293247   150.0 GiB   0700  G4Data
+   5      1258293248      1887438847   300.0 GiB   0700  G5Data
