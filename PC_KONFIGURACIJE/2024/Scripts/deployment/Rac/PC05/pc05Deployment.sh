@@ -14,11 +14,11 @@ if [ "$EUID" -ne 0 ]
 fi
 #########
 
-shareDir=/tmp
+shareDir=/tmp/share
 
 #Restore GPT_TABLES
-sgdisk -l $shareDir/share/GPTTablice/RacTablice/pc05All_Partitions.gpt /dev/nvme0n1
-sgdisk -l $shareDir/share/GPTTablice/RacTablice/pc05All_Data_Partitions.gpt /dev/sda
+sgdisk -l $shareDir/GPTTables/GPT05/pc05All_Partitions.gpt /dev/nvme0n1
+sgdisk -l $shareDir/GPTTables/GPT05/pc05All_Data_Partitions.gpt /dev/sda
 partprobe
 
 #Create Filesystems
@@ -33,43 +33,62 @@ for i in {1..5}; do mkfs.ntfs -Q /dev/sda$i; done
 apt install partclone -y
 
 #Restore LinuxOS
-partclone.fat32 -r -s $shareDir/share/Images/NEW_Linux/efiLinux.pcl -O /dev/nvme0n1p1
-partclone.ext4 -r -s $shareDir/share/Images/NEW_Linux/rootLinux.pcl -O /dev/nvme0n1p3
-partclone.ext4 -r -s $shareDir/share/Images/NEW_Linux/homeLinux.pcl -O /dev/nvme0n1p4
+partclone.fat32 -r -s $shareDir/Images/linux/efiLinux.pcl -O /dev/nvme0n1p1
+partclone.ext4 -r -s $shareDir/Images/linux/rootLinux.pcl -O /dev/nvme0n1p3
+partclone.ext4 -r -s $shareDir/Images/linux/homeLinux.pcl -O /dev/nvme0n1p4
 
 #Restore Windows OSes
 #WIN01
-partclone.fat32 -r -s $shareDir/share/Images/Windows/EFI_backups/efi5Backup.pcl -O /dev/nvme0n1p5
-partclone.ntfs -r -s $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl -O /dev/nvme0n1p7
+partclone.fat32 -r -s $shareDir/Images/windows/efi/efi5Backup.pcl -O /dev/nvme0n1p5
+partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p7
 ntfsresize --force --force /dev/nvme0n1p7
 
 #WIN02
-partclone.fat32 -r -s $shareDir/share/Images/Windows/EFI_backups/efi9Backup.pcl -O /dev/nvme0n1p9
-partclone.ntfs -r -s $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl -O /dev/nvme0n1p11
+partclone.fat32 -r -s $shareDir/Images/windows/efi/efi9Backup.pcl -O /dev/nvme0n1p9
+partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p11
 ntfsresize --force --force /dev/nvme0n1p11
 
 #WIN03
-partclone.fat32 -r -s $shareDir/share/Images/Windows/EFI_backups/efi13Backup.pcl -O /dev/nvme0n1p13
-partclone.ntfs -r -s $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl -O /dev/nvme0n1p15
+partclone.fat32 -r -s $shareDir/Images/windows/efi/efi13Backup.pcl -O /dev/nvme0n1p13
+partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p15
 ntfsresize --force --force /dev/nvme0n1p15
 
 #WIN04
-partclone.fat32 -r -s $shareDir/share/Images/Windows/EFI_backups/efi17Backup.pcl -O /dev/nvme0n1p17
-partclone.ntfs -r -s $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl -O /dev/nvme0n1p19
+partclone.fat32 -r -s $shareDir/Images/windows/efi/efi17Backup.pcl -O /dev/nvme0n1p17
+partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p19
 ntfsresize --force --force /dev/nvme0n1p19
 
 #WIN05
-partclone.fat32 -r -s $shareDir/share/Images/Windows/EFI_backups/efi21Backup.pcl -O /dev/nvme0n1p21
-partclone.ntfs -r -s $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl -O /dev/nvme0n1p23
+partclone.fat32 -r -s $shareDir/Images/windows/efi/efi21Backup.pcl -O /dev/nvme0n1p21
+partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p23
 ntfsresize --force --force /dev/nvme0n1p23
 
 #WIN06
-partclone.fat32 -r -s $shareDir/share/Images/Windows/EFI_backups/efi25Backup.pcl -O /dev/nvme0n1p25
-partclone.ntfs -r -s $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl -O /dev/nvme0n1p27
+partclone.fat32 -r -s $shareDir/Images/windows/efi/efi25Backup.pcl -O /dev/nvme0n1p25
+partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p27
 ntfsresize --force --force /dev/nvme0n1p27
 
 
 #Restore only Linux GPT table
-sgdisk -l $shareDir/share/GPTTablice/RacTablice/pc05Linux_Partitions.gpt /dev/nvme0n1
+sgdisk -l $shareDir/GPTTables/GPT05/pc05Linux_Partitions.gpt /dev/nvme0n1
 
+#Copy EFI, Linux root, and Windows backup images to the local home directory
+tempDir=/tmp
+mkdir -p $tempDir/images
+mount -t ext4 /dev/nvme0n1p4 $tempDir/images
+cp $shareDir/Images/linux/efiLinux.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/linux/rootLinux.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/windows/efi/efi5Backup.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/windows/efi/efi9Backup.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/windows/efi/efi13Backup.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/windows/efi/efi17Backup.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/windows/efi/efi21Backup.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/windows/efi/efi25Backup.pcl $tempDir/images/home/strippy/Images/
+cp $shareDir/Images/windows/win10Partclone/win01NEW.pcl $tempDir/images/home/strippy/Images/
+
+#Unmount the images directory
+umount $tempDir/images
+
+
+#Reboot the system
 reboot
