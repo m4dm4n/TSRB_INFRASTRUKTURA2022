@@ -21,11 +21,11 @@ cpu_model=$(lscpu | grep 'Model name:' | awk -F ':' '{print $2}' | xargs)
 if [[ $cpu_model == *"i5-12600"* ]]; then
     source ./PC02/pc02RacDeploymentMint.sh
 
-elif [[ $cpu_model == *"i7-12700"* ]]; then
-    source ./PC03/pc03RacDeploymentMint.sh
-
 elif [[ $cpu_model == *"i7-12700K"* ]]; then
     source ./PC05/pc05RacDeploymentMint.sh    
+
+elif [[ $cpu_model == *"i7-12700"* ]]; then
+    source ./PC03/pc03RacDeploymentMint.sh
 
 else
     echo "This is not a valid configuration"
