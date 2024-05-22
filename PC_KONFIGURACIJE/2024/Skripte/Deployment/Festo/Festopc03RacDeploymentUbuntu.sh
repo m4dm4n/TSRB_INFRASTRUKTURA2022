@@ -51,4 +51,21 @@ ntfsresize --force --force /dev/nvme0n1p11
 #Restore only Linux GPT table
 sgdisk -l $shareDir/share/GPTTablice/FestoTablice/festoLinux_Partitions.gpt /dev/nvme0n1
 
+#Copy EFI, Linux root, and Windows backup images to the local home directory
+mkdir -p $shareDir/images
+mount -t ext4 /dev/nvme0n1p4 $shareDir/images
+cp $shareDir/share/Images/NEW_Linux/efiLinux.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/NEW_Linux/rootLinux.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi5Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi9Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl $shareDir/images/home/strippy/Images/
+
+# Add Festo tag file for PC configuration identification
+touch $shareDir/images/home/student/Skripte/festoTag
+
+#Unmount the images directory
+umount $shareDir/images
+
+
+#Reboot the system
 reboot

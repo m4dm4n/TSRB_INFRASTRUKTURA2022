@@ -75,15 +75,15 @@ sgdisk -l $shareDir/share/GPTTablice/RacTablice/pc02Linux_Partitions.gpt /dev/nv
 #Copy EFI, Linux root, and Windows backup images to the local home directory
 mkdir -p $shareDir/images
 mount -t ext4 /dev/nvme0n1p4 $shareDir/images
-cp $shareDir/share/Images/NEW_Linux/efiLinux.pcl $shareDir/images/
-cp $shareDir/share/Images/NEW_Linux/rootLinux.pcl $shareDir/images/
-cp $shareDir/share/Images/Windows/EFI_backups/efi5Backup.pcl $shareDir/images/
-cp $shareDir/share/Images/Windows/EFI_backups/efi9Backup.pcl $shareDir/images/
-cp $shareDir/share/Images/Windows/EFI_backups/efi13Backup.pcl $shareDir/images/
-cp $shareDir/share/Images/Windows/EFI_backups/efi17Backup.pcl $shareDir/images/
-cp $shareDir/share/Images/Windows/EFI_backups/efi21Backup.pcl $shareDir/images/
-cp $shareDir/share/Images/Windows/EFI_backups/efi25Backup.pcl $shareDir/images/
-cp $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl $shareDir/images/
+cp $shareDir/share/Images/NEW_Linux/efiLinux.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/NEW_Linux/rootLinux.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi5Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi9Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi13Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi17Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi21Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/EFI_backups/efi25Backup.pcl $shareDir/images/home/strippy/Images/
+cp $shareDir/share/Images/Windows/Win10_01_Partclone/win01NEW.pcl $shareDir/images/home/strippy/Images/
 
 #Unmount the images directory
 umount $shareDir/images

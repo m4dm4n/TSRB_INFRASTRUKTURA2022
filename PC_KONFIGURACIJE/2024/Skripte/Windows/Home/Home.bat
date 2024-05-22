@@ -1,1 +1,1 @@
-powershell -ExecutionPolicy Bypass -File "C:\Skripte\Home\HomeRestore.ps1"
+powershell -ExecutionPolicy Bypass -File "C:\Skripte\Home\UniversalHomeRestore.ps1"
