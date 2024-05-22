@@ -29,11 +29,12 @@ fi
 if [[ $cpu_model == *"i5-12600"* ]]; then
     source $workDir/racPC02choiceOS.sh
 
+elif [[ $cpu_model == *"i7-12700K"* ]]; then
+    source $workDir/racPC05choiceOS.sh
+
 elif [[ $cpu_model == *"i7-12700"* ]]; then
     source $workDir/racPC0304choiceOS.sh
 
-elif [[ $cpu_model == *"i7-12700K"* ]]; then
-    source $workDir/racPC05choiceOS.sh
     
 else
     echo "This is not a valid configuration"
