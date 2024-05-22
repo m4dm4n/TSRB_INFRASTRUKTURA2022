@@ -1,7 +1,7 @@
 Disk /dev/sda: 7814037168 sectors, 3.6 TiB
 Model: WDC WD4003FRYZ-0
 Sector size (logical/physical): 512/4096 bytes
-Disk identifier (GUID): 6C99FC6C-D649-496B-B40E-4E1CEEE111A0
+Disk identifier (GUID): 6BA9C4D2-3BA0-4EE2-8318-CDBB9C0CF4C1
 Partition table holds up to 128 entries
 Main partition table begins at sector 2 and ends at sector 33
 First usable sector is 34, last usable sector is 7814037134
