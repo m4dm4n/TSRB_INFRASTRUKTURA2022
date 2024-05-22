@@ -103,6 +103,11 @@ echo -e "${GREEN}                    Done${NC}"
 #########Modify Partitions UUID#############
 ############################################
 echo -n "Modifying Partitions UUIDs..."
+
+#Modify Disk Serial Number
+sgdisk --disk-guid=9B953079-B003-4EFC-AAB0-D9935A11BCC2 /dev/$sysDrive >/dev/null 2>&1
+
+
 #Linux
 sgdisk --partition-guid=1:54535242-4D42-4D53-5A47-4C494E303031 /dev/$sysDrive >/dev/null 2>&1
 sgdisk --partition-guid=2:54535242-4D42-4D53-5A47-4C494E303032 /dev/$sysDrive >/dev/null 2>&1
