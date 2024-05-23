@@ -25,26 +25,26 @@ while true; do
     read -p "Odaberite broj za razinu razreda u kojoj se nalazite (1,2,3,4): " i
     case $i in
         1)
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win01_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G1data_Partitions.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win01_Partitions.gpt /dev/nvme0n1 >/dev/null 2>&1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G1data_Partitions.gpt /dev/sda >/dev/null 2>&1
             sudo reboot
             break
             ;;
         2)
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win02_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G2data_Partitions.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win02_Partitions.gpt /dev/nvme0n1 >/dev/null 2>&1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G2data_Partitions.gpt /dev/sda >/dev/null 2>&1
             sudo reboot
             break
             ;;
         3)
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win03_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G3data_Partitions.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win03_Partitions.gpt /dev/nvme0n1 >/dev/null 2>&1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G3data_Partitions.gpt /dev/sda >/dev/null 2>&1
             sudo reboot
             break
             ;;
         4)
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win04_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G4data_Partitions.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win04_Partitions.gpt /dev/nvme0n1 >/dev/null 2>&1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G4data_Partitions.gpt /dev/sda >/dev/null 2>&1
             sudo reboot
             break
             ;;
@@ -56,8 +56,8 @@ while true; do
                  if [[ $hashed_input == $stored_password5 ]]; then
                  #echo "Password is correct"
                  #exit 0
-                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win05_Partitions.gpt /dev/nvme0n1
-                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G1data_Partitions.gpt /dev/sda
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win05_Partitions.gpt /dev/nvme0n1 >/dev/null 2>&1
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G1data_Partitions.gpt /dev/sda >/dev/null 2>&1
                  sudo reboot
                  fi
             done < $password_file
@@ -72,8 +72,8 @@ while true; do
                  if [[ $hashed_input == $stored_password6 ]]; then
                  #echo "Password is correct"
                  #exit 0
-                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win06_Partitions.gpt /dev/nvme0n1
-                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G1data_Partitions.gpt /dev/sda
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05Win06_Partitions.gpt /dev/nvme0n1 >/dev/null 2>&1
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT05/pc05G1data_Partitions.gpt /dev/sda >/dev/null 2>&1
                  fi
             done < $password_file
             echo "Lozinka je netočna."
