@@ -20,8 +20,8 @@ while true; do
     read -p "Odaberite broj (1,2): " i
     case $i in
         1)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/festoWin01_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/festoG1data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/festoGPT03/festoWin01_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPTTables/festoGPT03/festoG1data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
@@ -33,8 +33,8 @@ while true; do
                  if [[ $hashed_input == $stored_password5 ]]; then
                  #echo "Password is correct"
                  #exit 0
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/festoWin02_Partitions.gpt /dev/nvme0n1
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/festoG2data_Partition.gpt /dev/sda
+                 sudo sgdisk -l /home/$USER/GPTTables/festoGPT03/festoWin02_Partitions.gpt /dev/nvme0n1
+                 sudo sgdisk -l /home/$USER/GPTTables/festoGPT03/festoG2data_Partition.gpt /dev/sda
                  sudo reboot
                  fi
             done < $password_file
