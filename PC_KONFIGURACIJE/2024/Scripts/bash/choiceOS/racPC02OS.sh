@@ -9,7 +9,10 @@ invalid_input() {
       echo "Nedopušten odabir, pokušajte ponovno"
 }
 
-echo "Odabirom opcije u skripti, računalo će izvršiti reboot, te će se
+echo "
+      Dobrodošli u skriptu za odabir operacijskog sustava na računalu PC02.
+      
+      Odabirom opcije u skripti, računalo će izvršiti reboot, te će se
       učitati verzija Windowsa ovisno o razini obrazovanja u kojoj se nalazite.
 
       Odaberite broj 1 za 1. razred
@@ -22,26 +25,26 @@ while true; do
     read -p "Odaberite broj za razinu razreda u kojoj se nalazite (1,2,3,4): " i
     case $i in
         1)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win01_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02G1data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02Win01_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02G1data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
         2)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win02_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02G2data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02Win02_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02G2data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
         3)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win03_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02G3data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02Win03_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02G3data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
         4)
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win04_Partitions.gpt /dev/nvme0n1
-            sudo sgdisk -l /home/$USER/GPT_Tablice/pc02G4data_Partition.gpt /dev/sda
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02Win04_Partitions.gpt /dev/nvme0n1
+            sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02G4data_Partition.gpt /dev/sda
             sudo reboot
             break
             ;;
@@ -53,8 +56,8 @@ while true; do
                  if [[ $hashed_input == $stored_password5 ]]; then
                  #echo "Password is correct"
                  #exit 0
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win05_Partitions.gpt /dev/nvme0n1
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc02G5data_Partition.gpt /dev/sda
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02Win05_Partitions.gpt /dev/nvme0n1
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02G5data_Partition.gpt /dev/sda
                  sudo reboot
                  fi
             done < $password_file
@@ -69,8 +72,8 @@ while true; do
                  if [[ $hashed_input == $stored_password6 ]]; then
                  #echo "Password is correct"
                  #exit 0
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc02Win06_Partitions.gpt /dev/nvme0n1
-                 sudo sgdisk -l /home/$USER/GPT_Tablice/pc02G5data_Partition.gpt /dev/sda
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02Win06_Partitions.gpt /dev/nvme0n1
+                 sudo sgdisk -l /home/$USER/GPTTables/GPT02/pc02G5data_Partition.gpt /dev/sda
                  sudo reboot
                  fi
             done < $password_file
