@@ -95,55 +95,55 @@ $windowsPartitionSize = ( Get-Partition -DriveLetter C | Select-Object -ExpandPr
 
 # Check which PC configuration is this and set backup file paths
 if ( ( $windowsPartitionSize / 1GB ) -ge 300 ) {
-    #Write-Output "This is Festo PC configuration"
-    $ssdBackupFilePath = "C:\Skripte\Home\pc02LinuxPartitions.gpt"
+    Write-Output "This is Festo PC configuration"
+    $ssdBackupFilePath = "C:\Skripte\Home\pc02Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\festoAll_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
-    if (-not (Test-Path $hddBackupFilePath -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
 }
 elseif ( ( $hddDiskSize / 1GB ) -ge 3500 ) {
-    #Write-Output "This is PC05 configuration"
-    $ssdBackupFilePath = "C:\Skripte\Home\pc05LinuxPartitions.gpt"
+    Write-Output "This is PC05 configuration"
+    $ssdBackupFilePath = "C:\Skripte\Home\pc05Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\pc05All_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
-    if (-not (Test-Path $hddBackupFilePath -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
 }
 elseif ( ( $hddDiskSize / 1GB ) -ge 1000 -and ( $hddDiskSize / 1GB ) -lt 3500 )
 {
-    #Write-Output "This is PC03 or PC04 configuration"
-    $ssdBackupFilePath = "C:\Skripte\Home\pc02LinuxPartitions.gpt"
+    Write-Output "This is PC03 or PC04 configuration"
+    $ssdBackupFilePath = "C:\Skripte\Home\pc02Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\pc0304All_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
-    if (-not (Test-Path $hddBackupFilePath -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
 }
 elseif ( ( $hddDiskSize / 1GB ) -ge 500 -and ( $hddDiskSize / 1GB ) -lt 1000 )
 {
-    #Write-Output "This is PC02 configuration"
-    $ssdBackupFilePath = "C:\Skripte\Home\pc02LinuxPartitions.gpt"
+    Write-Output "This is PC02 configuration"
+    $ssdBackupFilePath = "C:\Skripte\Home\pc02Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\pc02All_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
-    if (-not (Test-Path $hddBackupFilePath -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" })) {
+    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
         Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
         exit
     }
@@ -260,3 +260,11 @@ $hddDiskStream.Write($hddGptBackupHeaderBytes, 0, $GptBackupHeaderLength)
 $hddDiskStream.Close()
 
 #############################################################################################
+
+
+# Display a message indicating the restore was successful
+Write-Host "Protective MBR, primary/secondary GPT header and tabless restored successfully."
+
+Write-Host "Computer will restart in 5 seconds"
+Start-Sleep -Seconds 5
+Restart-Computer -Force
