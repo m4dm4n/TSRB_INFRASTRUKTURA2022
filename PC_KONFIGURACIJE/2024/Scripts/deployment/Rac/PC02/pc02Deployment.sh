@@ -77,18 +77,18 @@ sgdisk -l $shareDir/GPTTables/GPT02/pc02Linux_Partitions.gpt /dev/nvme0n1
 tempDir=/tmp
 mkdir -p $tempDir/images
 mount -t ext4 /dev/nvme0n1p4 $tempDir/images
-if [ ! -d "$tempDir/images/home/strippy/Images" ]; then
-    mkdir -p "$tempDir/images/home/strippy/Images"
+if [ ! -d "$tempDir/images/strippy/Images" ]; then
+    mkdir -p "$tempDir/images/strippy/Images"
 fi
-rsync -ah --progress $shareDir/Images/linux/efiLinux.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/linux/rootLinux.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/windows/efi/efi5Backup.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/windows/efi/efi9Backup.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/windows/efi/efi13Backup.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/windows/efi/efi17Backup.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/windows/efi/efi21Backup.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/windows/efi/efi25Backup.pcl $tempDir/images/home/strippy/Images/
-rsync -ah --progress $shareDir/Images/windows/win10Partclone/win01NEW.pcl $tempDir/images/home/strippy/Images/
+rsync -ah --progress $shareDir/Images/linux/efiLinux.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/linux/rootLinux.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi5Backup.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi9Backup.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi13Backup.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi17Backup.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi21Backup.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi25Backup.pcl $tempDir/images/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/win10Partclone/win01NEW.pcl $tempDir/images/strippy/Images/
 
 #Unmount the images directory
 umount $tempDir/images

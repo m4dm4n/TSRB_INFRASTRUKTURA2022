@@ -8,14 +8,6 @@ set -o errexit     # It will exit on first error in script
 set -o pipefail    #It will exit on first error in some pipeline
 #########
 
-#########
-# Check if the script is run as root
-if [ "$EUID" -ne 0 ]
-   then echo "Run the script with root permissions (sudo ./scriptname.sh)"
-   exit 1
-fi
-#########
-
 # Get the CPU model
 cpu_model=$(lscpu | grep 'Model name:' | awk -F ':' '{print $2}' | xargs)
 
