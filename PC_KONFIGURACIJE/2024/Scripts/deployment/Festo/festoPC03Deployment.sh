@@ -20,7 +20,8 @@ shareDir=/tmp/share
 sgdisk -l $shareDir/GPTTables/festoGPT03/festoAll_Partitions.gpt /dev/nvme0n1
 sgdisk -l $shareDir/GPTTables/festoGPT03/festoAll_Data_Partitions.gpt /dev/sda
 partprobe
-
+sgdisk -p /dev/nvme0n1
+sgdisk -p /dev/sda
 #Create Filesystems
 for i in {1,5,9}; do mkfs.vfat -F 32 /dev/nvme0n1p$i; done
 mkswap --verbose /dev/nvme0n1p2
@@ -55,11 +56,14 @@ sgdisk -l $shareDir/GPTTables/festoGPT03/festoLinux_Partitions.gpt /dev/nvme0n1
 tempDir=/tmp
 mkdir -p $tempDir/images
 mount -t ext4 /dev/nvme0n1p4 $tempDir/images
-cp -f $shareDir/Images/linux/efiLinux.pcl $tempDir/images/home/strippy/Images/
-cp -f $shareDir/Images/linux/rootLinux.pcl $tempDir/images/home/strippy/Images/
-cp -f $shareDir/Images/windows/efi/efi5Backup.pcl $tempDir/images/home/strippy/Images/
-cp -f $shareDir/Images/windows/efi/efi9Backup.pcl $tempDir/images/home/strippy/Images/
-cp -f $shareDir/Images/windows/win10Partclone/win01NEW.pcl $tempDir/images/home/strippy/Images/
+if [ ! -d "$tempDir/images/home/strippy/Images" ]; then
+    mkdir -p "$tempDir/images/home/strippy/Images"
+fi
+rsync -ah --progress $shareDir/Images/linux/efiLinux.pcl $tempDir/images/home/strippy/Images/
+rsync -ah --progress $shareDir/Images/linux/rootLinux.pcl $tempDir/images/home/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi5Backup.pcl $tempDir/images/home/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/efi/efi9Backup.pcl $tempDir/images/home/strippy/Images/
+rsync -ah --progress $shareDir/Images/windows/win10Partclone/win01NEW.pcl $tempDir/images/home/strippy/Images/
 
 # Add Festo tag file for PC configuration identification
 touch $tempDir/images/home/student/Skripte/festoTag
