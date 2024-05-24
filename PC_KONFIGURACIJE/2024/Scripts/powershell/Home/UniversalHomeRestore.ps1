@@ -7,6 +7,7 @@
 ## detects PC configuration type and restores home partition from backup file
 #############################################################################################
 
+
 #############################################################################################
 ## Check if script is running as Administrator
 # Get the ID and security principal of the current user account
@@ -66,27 +67,42 @@ try {
 }
 #############################################################################################
 
+# Warn User that all events are monitored
+Write-Output "****************************"
+Write-Output "All events on this computer are monitored and logged"
+Write-Output "****************************"
+Start-Sleep -Seconds 5
+
 #############################################################################################
 ## Check if all GPT backup files are available, readable and original content is not changed
+$directory = "C:\Skripte\Home"
 $files = @(
-    "C:\Skripte\Home\pc02Linux_Partitions.gpt",
-    "C:\Skripte\Home\pc02All_Data_Partitions.gpt",
-    "C:\Skripte\Home\pc0304All_Data_Partitions.gpt",
-    "C:\Skripte\Home\pc05Linux_Partitions.gpt",
-    "C:\Skripte\Home\pc05All_Data_Partitions.gpt",
-    "C:\Skripte\Home\festoAll_Data_Partitions.gpt"
+    "pc02Linux_Partitions.gpt",
+    "pc02All_Data_Partitions.gpt",
+    "pc0304All_Data_Partitions.gpt",
+    "pc05Linux_Partitions.gpt",
+    "pc05All_Data_Partitions.gpt",
+    "festoAll_Data_Partitions.gpt",
+    "pc02Linux_Partitions.md5",
+    "pc02All_Data_Partitions.md5",
+    "pc0304All_Data_Partitions.md5",
+    "pc05Linux_Partitions.md5",
+    "pc05All_Data_Partitions.md5",
+    "festoAll_Data_Partitions.md5"
 )
 
-# Check if all files exist and are readable
+# Check if all files exist
 foreach ($file in $files) {
-    if (-not (Test-Path $file) -or (Get-Acl $file).Access | Where-Object { $_.FileSystemRights -ne "Read" }) {
-        Write-Output "$file does not exist or is not readable. Exiting script."
+    if (-not (Test-Path $directory\$file)) {
+        Write-Output "$directory\$file does not exist. Exiting script."
         exit
+    } else {
+        Write-Host -NoNewline "."
     }
-}
+}   
+Write-Output "All GPT files exist at the location."
 
 # Check if all files have the same content
-$directory = "C:\skripte\home"
 $files = Get-ChildItem -Path $directory -Filter "*.gpt" | ForEach-Object { $_.BaseName }
 
 foreach ($file in $files) {
@@ -95,6 +111,7 @@ foreach ($file in $files) {
 
     if ($hashFromFile -ne $computedHash) {
         Write-Output "Hash mismatch for $file.gpt"
+        exit
     } else {
         Write-Host -NoNewline "."
     }
@@ -133,55 +150,23 @@ if ( ( $windowsPartitionSize / 1GB ) -ge 300 ) {
     Write-Output "This is Festo PC configuration"
     $ssdBackupFilePath = "C:\Skripte\Home\pc02Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\festoAll_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
-    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
 }
 elseif ( ( $hddDiskSize / 1GB ) -ge 3500 ) {
     Write-Output "This is PC05 configuration"
     $ssdBackupFilePath = "C:\Skripte\Home\pc05Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\pc05All_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
-    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
 }
 elseif ( ( $hddDiskSize / 1GB ) -ge 1000 -and ( $hddDiskSize / 1GB ) -lt 3500 )
 {
     Write-Output "This is PC03 or PC04 configuration"
     $ssdBackupFilePath = "C:\Skripte\Home\pc02Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\pc0304All_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
-    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
 }
 elseif ( ( $hddDiskSize / 1GB ) -ge 500 -and ( $hddDiskSize / 1GB ) -lt 1000 )
 {
     Write-Output "This is PC02 configuration"
     $ssdBackupFilePath = "C:\Skripte\Home\pc02Linux_Partitions.gpt"
     $hddBackupFilePath = "C:\Skripte\Home\pc02All_Data_Partitions.gpt"
-    if (-not (Test-Path $ssdBackupFilePath) -and (Get-Acl $ssdBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$ssdBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
-    if (-not (Test-Path $hddBackupFilePath) -and (Get-Acl $hddBackupFilePath).Access | Where-Object { $_.FileSystemRights -eq "Read" }) {
-        Write-Output "$hddBackupFilePath does not exist or is not readable. Exiting script."
-        exit
-    }
 }
 else {
     Write-Output "This is not any valid PC configuration. Press any key to exit script"
@@ -189,6 +174,7 @@ else {
     exit
 }
 #############################################################################################
+
 
 #############################################################################################
 ## GPT RESTORE VARIABLE DEFINITIONS
