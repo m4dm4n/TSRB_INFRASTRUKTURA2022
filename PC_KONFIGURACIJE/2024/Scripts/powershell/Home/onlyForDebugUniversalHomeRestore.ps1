@@ -1,13 +1,13 @@
 ﻿#############################################################################################
-## Name : UniversalHomeRestore.ps1
+## Name : onlyForDebugUniversalHomeRestore.ps1
 ## Author: Marko Stojanović
 ## Date: 22.05.2024.
 ## Version: 1.0
-## Description: This script is used to restore home partition on TSRB PC configurations, it automaticaly 
-## detects PC configuration type and restores home partition from backup file
+## Description: This script is used to debug Universal Home Restore script. It only reads and
+## variable values
 #############################################################################################
 
-
+<#
 #############################################################################################
 ## Check if script is running as Administrator
 # Get the ID and security principal of the current user account
@@ -34,6 +34,8 @@ $newProcess.Verb = "runas";
 exit
 }
 #############################################################################################
+#>
+
 
 #############################################################################################
 ## Check if any disk is visible to this script
@@ -67,12 +69,6 @@ try {
 }
 #############################################################################################
 
-# Warn User that all events are monitored
-Write-Output "****************************"
-Write-Output "All events on this computer are monitored and logged"
-Write-Output "****************************"
-Start-Sleep -Seconds 5
-
 #############################################################################################
 ## Check if all GPT backup files are available, readable and original content is not changed
 $directory = "C:\Skripte\Home"
@@ -94,8 +90,8 @@ $files = @(
 # Check if all files exist
 foreach ($file in $files) {
     if (-not (Test-Path $directory\$file)) {
-        Write-Output "$directory\$file does not exist. Exiting script."
-        exit
+        Write-Output "$directory\$file does not exist."
+#        exit
     } else {
         Write-Host -NoNewline "."
     }
@@ -110,8 +106,8 @@ foreach ($file in $files) {
     $computedHash = (Get-FileHash "$directory\$file.gpt" -Algorithm MD5).Hash
 
     if ($hashFromFile -ne $computedHash) {
-        Write-Output "Hash mismatch for $file.gpt.  Exiting script."
-        exit
+        Write-Output "Hash mismatch for $file.gpt"
+#        exit
     } else {
         Write-Host -NoNewline "."
     }
@@ -201,91 +197,32 @@ $hddGptBackupHeaderOffset = (($hddDiskSize / 512) - 1)* 512
 $GptBackupHeaderLength = 1 * 512
 #############################################################################################
 
-#############################################################################################
-#### SSD GPT RESTORE ####
-# Read the protective MBR and GPT backup from the backup file into byte arrays
-$ssdBackupBytes = New-Object byte[] ($MbrLength + $GptHeaderLength + $GptBackupHeaderLength + $GptTableLength)
-$ssdBackupStream = New-Object System.IO.FileStream($ssdBackupFilePath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read)
-$ssdBackupStream.Read($ssdBackupBytes, 0, $MbrLength + $GptHeaderLength + $GptBackupHeaderLength + $GptTableLength)
-$ssdBackupStream.Close()
+Write-Output "Working folder: $directory"
 
-$ssdMbrBytes = New-Object byte[] $MbrLength
-[System.Buffer]::BlockCopy($ssdBackupBytes, 0, $ssdMbrBytes, 0, $MbrLength)
+Write-Output "Number of storage devices identified in the system: $deviceIDCount"
 
-$ssdGptHeaderBytes = New-Object byte[] $GptHeaderLength
-[System.Buffer]::BlockCopy($ssdBackupBytes, $MbrLength, $ssdGptHeaderBytes, 0, $GptHeaderLength)
+Write-Output "SSD disk number: $ssdDiskNumber"
 
-$ssdGptBackupHeaderBytes = New-Object byte[] $GptBackupHeaderLength
-[System.Buffer]::BlockCopy($ssdBackupBytes, $MbrLength + $GptHeaderLength, $ssdGptBackupHeaderBytes, 0, $GptBackupHeaderLength)
+Write-Output "HDD disk number: $hddDiskNumber"
 
-$ssdGptTableBytes = New-Object byte[] $GptTableLength
-[System.Buffer]::BlockCopy($ssdBackupBytes, $MbrLength + $GptHeaderLength + $GptBackupHeaderLength, $ssdGptTableBytes, 0, $GptTableLength)
+Write-Output "SSD disk size: $ssdDiskSize"
 
-# Write the protective MBR and primary GPT backup to the disk
-$ssdDiskStream = New-Object System.IO.FileStream("\\.\PhysicalDrive$ssdDiskNumber", [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write)
-$ssdDiskStream.Position = $MbrOffset
-$ssdDiskStream.Write($ssdMbrBytes, 0, $MbrLength)
-$ssdDiskStream.Position = $GptHeaderOffset
-$ssdDiskStream.Write($ssdGptHeaderBytes, 0, $GptHeaderLength)
-$ssdDiskStream.Position = $GptTableOffset
-$ssdDiskStream.Write($ssdGptTableBytes, 0, $GptTableLength)
-$ssdDiskStream.Close()
+Write-Output "HDD disk size: $hddDiskSize"
 
-# Write the backup GPT header and partition table to the disk
-$ssdDiskStream = New-Object System.IO.FileStream("\\.\PhysicalDrive$ssdDiskNumber", [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write)
-$ssdDiskStream.Position = $ssdGptBackupTableOffset
-$ssdDiskStream.Write($ssdGptTableBytes, 0, $GptTableLength)
-$ssdDiskStream.Position = $ssdGptBackupHeaderOffset
-$ssdDiskStream.Write($ssdGptBackupHeaderBytes, 0, $GptBackupHeaderLength)
-$ssdDiskStream.Close()
+Write-Output "Windows partition size: $windowsPartitionSize"
 
-#############################################################################################
+Write-Output "SSD Backup file path: $ssdBackupFilePath"
 
+Write-Output "HDD Backup file path: $hddBackupFilePath" 
 
-#############################################################################################
-#### HDD GPT RESTORE ####
-# Read the protective MBR and GPT backup from the backup file into byte arrays
-$hddBackupBytes = New-Object byte[] ($MbrLength + $GptHeaderLength + $GptBackupHeaderLength + $GptTableLength)
-$hddBackupStream = New-Object System.IO.FileStream($hddBackupFilePath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read)
-$hddBackupStream.Read($hddBackupBytes, 0, $MbrLength + $GptHeaderLength + $GptBackupHeaderLength + $GptTableLength)
-$hddBackupStream.Close()
+Write-Output "SSD GPT Backup Header offset location: $ssdGptBackupHeaderOffset"
 
-$hddMbrBytes = New-Object byte[] $MbrLength
-[System.Buffer]::BlockCopy($hddBackupBytes, 0, $hddMbrBytes, 0, $MbrLength)
+Write-Output "HDD GPT Backup Header offset location: $hddGptBackupHeaderOffset"
 
-$hddGptHeaderBytes = New-Object byte[] $GptHeaderLength
-[System.Buffer]::BlockCopy($hddBackupBytes, $MbrLength, $hddGptHeaderBytes, 0, $GptHeaderLength)
+Write-Output "SSD GPT Backup Table offset location: $ssdGptBackupTableOffset"
 
-$hddGptBackupHeaderBytes = New-Object byte[] $GptBackupHeaderLength
-[System.Buffer]::BlockCopy($hddBackupBytes, $MbrLength + $GptHeaderLength, $hddGptBackupHeaderBytes, 0, $GptBackupHeaderLength)
+Write-Output "HDD GPT Backup Table offset location: $hddGptBackupTableOffset"
 
-$hddGptTableBytes = New-Object byte[] $GptTableLength
-[System.Buffer]::BlockCopy($hddBackupBytes, $MbrLength + $GptHeaderLength + $GptBackupHeaderLength, $hddGptTableBytes, 0, $GptTableLength)
+Write-Output "Press any key to exit script"
+Read-Host
 
-# Write the protective MBR and primary GPT backup to the disk
-$hddDiskStream = New-Object System.IO.FileStream("\\.\PhysicalDrive$hddDiskNumber", [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write)
-$hddDiskStream.Position = $MbrOffset
-$hddDiskStream.Write($hddMbrBytes, 0, $MbrLength)
-$hddDiskStream.Position = $GptHeaderOffset
-$hddDiskStream.Write($hddGptHeaderBytes, 0, $GptHeaderLength)
-$hddDiskStream.Position = $GptTableOffset
-$hddDiskStream.Write($hddGptTableBytes, 0, $GptTableLength)
-$hddDiskStream.Close()
-
-# Write the backup GPT header and partition table to the disk
-$hddDiskStream = New-Object System.IO.FileStream("\\.\PhysicalDrive$hddDiskNumber", [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write)
-$hddDiskStream.Position = $hddGptBackupTableOffset
-$hddDiskStream.Write($hddGptTableBytes, 0, $GptTableLength)
-$hddDiskStream.Position = $hddGptBackupHeaderOffset
-$hddDiskStream.Write($hddGptBackupHeaderBytes, 0, $GptBackupHeaderLength)
-$hddDiskStream.Close()
-
-#############################################################################################
-
-
-# Display a message indicating the restore was successful
-Write-Host "Protective MBR, primary/secondary GPT header and tabless restored successfully."
-
-Write-Host "Computer will restart in 5 seconds"
-Start-Sleep -Seconds 5
-Restart-Computer -Force
