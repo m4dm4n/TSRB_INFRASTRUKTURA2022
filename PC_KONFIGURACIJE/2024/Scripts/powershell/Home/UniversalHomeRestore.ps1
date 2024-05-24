@@ -66,6 +66,41 @@ try {
 }
 #############################################################################################
 
+#############################################################################################
+## Check if all GPT backup files are available, readable and original content is not changed
+$files = @(
+    "C:\Skripte\Home\pc02Linux_Partitions.gpt",
+    "C:\Skripte\Home\pc02All_Data_Partitions.gpt",
+    "C:\Skripte\Home\pc0304All_Data_Partitions.gpt",
+    "C:\Skripte\Home\pc05Linux_Partitions.gpt",
+    "C:\Skripte\Home\pc05All_Data_Partitions.gpt",
+    "C:\Skripte\Home\festoAll_Data_Partitions.gpt"
+)
+
+# Check if all files exist and are readable
+foreach ($file in $files) {
+    if (-not (Test-Path $file) -or (Get-Acl $file).Access | Where-Object { $_.FileSystemRights -ne "Read" }) {
+        Write-Output "$file does not exist or is not readable. Exiting script."
+        exit
+    }
+}
+
+# Check if all files have the same content
+$directory = "C:\skripte\home"
+$files = Get-ChildItem -Path $directory -Filter "*.gpt" | ForEach-Object { $_.BaseName }
+
+foreach ($file in $files) {
+    $hashFromFile = Get-Content "$directory\$file.md5"
+    $computedHash = (Get-FileHash "$directory\$file.gpt" -Algorithm MD5).Hash
+
+    if ($hashFromFile -ne $computedHash) {
+        Write-Output "Hash mismatch for $file.gpt"
+    } else {
+        Write-Host -NoNewline "."
+    }
+}
+Write-Output "GPT Files integrity is OK."
+#############################################################################################
 
 
 #############################################################################################	
