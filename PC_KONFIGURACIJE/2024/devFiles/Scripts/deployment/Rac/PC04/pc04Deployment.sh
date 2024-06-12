@@ -19,7 +19,9 @@ shareDir=/tmp/share
 #Restore GPT_TABLES
 sgdisk -l $shareDir/GPTTables/GPT02/pc02All_Partitions.gpt /dev/nvme0n1
 sgdisk -l $shareDir/GPTTables/GPT0304/pc0304All_Data_Partitions.gpt /dev/sda
+sleep 1
 partprobe
+sleep 5
 sgdisk -p /dev/nvme0n1
 sgdisk -p /dev/sda
 #Create Filesystems
@@ -38,40 +40,6 @@ partclone.fat32 -r -s $shareDir/Images/linux/efiLinux.pcl -O /dev/nvme0n1p1
 partclone.ext4 -r -s $shareDir/Images/linux/rootLinux.pcl -O /dev/nvme0n1p3
 partclone.ext4 -r -s $shareDir/Images/linux/homeLinux.pcl -O /dev/nvme0n1p4
 
-#Restore Windows OSes
-#WIN01
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi5Backup.pcl -O /dev/nvme0n1p5
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p7
-ntfsresize --force --force /dev/nvme0n1p7
-
-#WIN02
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi9Backup.pcl -O /dev/nvme0n1p9
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p11
-ntfsresize --force --force /dev/nvme0n1p11
-
-#WIN03
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi13Backup.pcl -O /dev/nvme0n1p13
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p15
-ntfsresize --force --force /dev/nvme0n1p15
-
-#WIN04
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi17Backup.pcl -O /dev/nvme0n1p17
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p19
-ntfsresize --force --force /dev/nvme0n1p19
-
-#WIN05
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi21Backup.pcl -O /dev/nvme0n1p21
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p23
-ntfsresize --force --force /dev/nvme0n1p23
-
-#WIN06
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi25Backup.pcl -O /dev/nvme0n1p25
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p27
-ntfsresize --force --force /dev/nvme0n1p27
-
-
-#Restore only Linux GPT table
-sgdisk -l $shareDir/GPTTables/GPT02/pc02Linux_Partitions.gpt /dev/nvme0n1
 #Copy EFI, Linux root, and Windows backup images to the local home directory
 tempDir=/tmp
 mkdir -p $tempDir/images
@@ -88,6 +56,42 @@ rsync -ah --progress $shareDir/Images/windows/efi/efi17Backup.pcl $tempDir/image
 rsync -ah --progress $shareDir/Images/windows/efi/efi21Backup.pcl $tempDir/images/strippy/Images/
 rsync -ah --progress $shareDir/Images/windows/efi/efi25Backup.pcl $tempDir/images/strippy/Images/
 rsync -ah --progress $shareDir/Images/windows/win10Partclone/win01NEW.pcl $tempDir/images/strippy/Images/
+
+
+#Restore Windows OSes
+#WIN01
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi5Backup.pcl -O /dev/nvme0n1p5
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p7
+ntfsresize --force --force /dev/nvme0n1p7
+
+#WIN02
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi9Backup.pcl -O /dev/nvme0n1p9
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p11
+ntfsresize --force --force /dev/nvme0n1p11
+
+#WIN03
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi13Backup.pcl -O /dev/nvme0n1p13
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p15
+ntfsresize --force --force /dev/nvme0n1p15
+
+#WIN04
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi17Backup.pcl -O /dev/nvme0n1p17
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p19
+ntfsresize --force --force /dev/nvme0n1p19
+
+#WIN05
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi21Backup.pcl -O /dev/nvme0n1p21
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p23
+ntfsresize --force --force /dev/nvme0n1p23
+
+#WIN06
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi25Backup.pcl -O /dev/nvme0n1p25
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p27
+ntfsresize --force --force /dev/nvme0n1p27
+
+
+#Restore only Linux GPT table
+sgdisk -l $shareDir/GPTTables/GPT02/pc02Linux_Partitions.gpt /dev/nvme0n1
 
 #Unmount the images directory
 umount $tempDir/images

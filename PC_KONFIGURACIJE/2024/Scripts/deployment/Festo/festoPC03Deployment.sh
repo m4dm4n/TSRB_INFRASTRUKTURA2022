@@ -19,7 +19,9 @@ shareDir=/tmp/share
 #Restore GPT_TABLES
 sgdisk -l $shareDir/GPTTables/festoGPT03/festoAll_Partitions.gpt /dev/nvme0n1
 sgdisk -l $shareDir/GPTTables/festoGPT03/festoAll_Data_Partitions.gpt /dev/sda
+sleep 1
 partprobe
+sleep 5
 sgdisk -p /dev/nvme0n1
 sgdisk -p /dev/sda
 #Create Filesystems
@@ -38,20 +40,6 @@ partclone.fat32 -r -s $shareDir/Images/linux/efiLinux.pcl -O /dev/nvme0n1p1
 partclone.ext4 -r -s $shareDir/Images/linux/rootLinux.pcl -O /dev/nvme0n1p3
 partclone.ext4 -r -s $shareDir/Images/linux/homeLinux.pcl -O /dev/nvme0n1p4
 
-#Restore Windows OSes
-#WIN01
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi5Backup.pcl -O /dev/nvme0n1p5
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p7
-ntfsresize --force --force /dev/nvme0n1p7
-
-#WIN02
-partclone.fat32 -r -s $shareDir/Images/windows/efi/efi9Backup.pcl -O /dev/nvme0n1p9
-partclone.ntfs -r -s $shareDir/Images/windows/win10Partclone/win01NEW.pcl -O /dev/nvme0n1p11
-ntfsresize --force --force /dev/nvme0n1p11
-
-#Restore only Linux GPT table
-sgdisk -l $shareDir/GPTTables/festoGPT03/festoLinux_Partitions.gpt /dev/nvme0n1
-
 #Copy EFI, Linux root, and Windows backup images to the local home directory
 tempDir=/tmp
 mkdir -p $tempDir/images
@@ -67,6 +55,21 @@ rsync -ah --progress $shareDir/Images/windows/win10Partclone/win01NEW.pcl $tempD
 
 # Add Festo tag file for PC configuration identification
 touch $tempDir/images/student/Skripte/festoTag
+
+
+#Restore Windows OSes
+#WIN01
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi5Backup.pcl -O /dev/nvme0n1p5
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p7
+ntfsresize --force --force /dev/nvme0n1p7
+
+#WIN02
+partclone.fat32 -r -s $tempDir/images/strippy/Images/efi9Backup.pcl -O /dev/nvme0n1p9
+partclone.ntfs -r -s $tempDir/images/strippy/Images/win01NEW.pcl -O /dev/nvme0n1p11
+ntfsresize --force --force /dev/nvme0n1p11
+
+#Restore only Linux GPT table
+sgdisk -l $shareDir/GPTTables/festoGPT03/festoLinux_Partitions.gpt /dev/nvme0n1
 
 #Unmount the images directory
 umount $tempDir/images
