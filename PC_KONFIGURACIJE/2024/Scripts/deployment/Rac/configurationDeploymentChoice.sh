@@ -20,17 +20,20 @@ cpu_model=$(lscpu | grep 'Model name:' | awk -F ':' '{print $2}' | xargs)
 # Check the CPU model and call the next deployment script
 if [[ $cpu_model == *"i5-12600"* ]]; then
     echo "PC02 recognized"
-    read -n1 -s -r -p "Press any key to continue"
+    sleep 5
+#    read -n1 -s -r -p "Press any key to continue"
     source ./PC02/pc02Deployment.sh
 
 elif [[ $cpu_model == *"i7-12700K"* ]]; then
     echo "PC05 recognized"
-    read -n1 -s -r -p "Press any key to continue"
+    sleep 5
+#    read -n1 -s -r -p "Press any key to continue"
     source ./PC05/pc05Deployment.sh    
 
 elif [[ $cpu_model == *"i7-12700"* ]]; then
     echo "PC03 or PC04 recognized"
-    read -n1 -s -r -p "Press any key to continue"
+    sleep 5
+#    read -n1 -s -r -p "Press any key to continue"
     source ./PC03/pc03Deployment.sh
 
 else
